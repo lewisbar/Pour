@@ -47,7 +47,12 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         audioSession = AVAudioSession.sharedInstance()
         
         do {
-            try audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord, with: [.defaultToSpeaker, .allowAirPlay, .allowBluetooth, .allowBluetoothA2DP])
+            if #available(iOS 10.0, *) {
+                try audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord, with: [.defaultToSpeaker, .allowAirPlay, .allowBluetooth, .allowBluetoothA2DP])
+            } else {
+                // Fallback on earlier versions
+                try audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord, with: [.defaultToSpeaker, .allowBluetooth])
+            }
             try audioSession?.setActive(true)
             audioSession?.requestRecordPermission() { [unowned self] allowed in
                 if allowed {
