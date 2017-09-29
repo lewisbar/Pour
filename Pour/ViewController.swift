@@ -154,7 +154,8 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         // Deletion
         case delete:
             audioPlayer?.stop()
-            audioRecorder?.deleteRecording()
+            // audioRecorder?.deleteRecording() // File gets overridden by prepareToRecord()
+            audioRecorder?.prepareToRecord()
             topButton.setImage(settings, for: .normal)
             bottomButton.setImage(rec, for: .normal)
             
@@ -192,7 +193,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         audioRecorder?.stop()
         
         if success {
-            print("Recording finished successfully")
+            // print("Recording finished successfully")
         } else {
             alert(title: "Recording failed", message: "Please contact RecFlow support")
             topButton.setImage(settings, for: .normal)
