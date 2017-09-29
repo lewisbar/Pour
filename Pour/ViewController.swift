@@ -19,7 +19,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
     var isRecordingAllowed = false
-    lazy var audioURL = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+    lazy var audioURL = getDocumentsDirectory().appendingPathComponent("recording.m4a", isDirectory: false)
     
     // Images
     let settings =  #imageLiteral(resourceName: "Settings Button")
@@ -76,6 +76,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         do {
             audioRecorder = try AVAudioRecorder(url: audioURL, settings: settings)
             audioRecorder?.delegate = self
+            audioRecorder?.prepareToRecord()
         } catch {
             finishRecording(success: false)
         }
