@@ -11,6 +11,9 @@ import AVFoundation
 
 class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
+    // TODO: Preserve ViewController state when the app is closed
+    // (otherwise you're not able to get to a not-yet-deleted recording because the start screen is shown)
+    
     // MARK: - Properties
     // Recording
     @IBOutlet weak var topButton: UIButton!
@@ -154,7 +157,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         // Deletion
         case delete:
             audioPlayer?.stop()
-            // audioRecorder?.deleteRecording() // File gets overridden by prepareToRecord()
+            // audioRecorder?.deleteRecording() // File gets overridden by prepareToRecord() anyway
             audioRecorder?.prepareToRecord()
             topButton.setImage(settings, for: .normal)
             bottomButton.setImage(rec, for: .normal)
