@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import EvernoteSDK
 
 class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
@@ -23,6 +24,8 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     var audioPlayer: AVAudioPlayer?
     var isRecordingAllowed = false
     lazy var audioURL = getDocumentsDirectory().appendingPathComponent("recording.m4a", isDirectory: false)
+    
+    var noteRef: ENNoteRef?
     
     // Images
     let settings =  #imageLiteral(resourceName: "Settings Button")
@@ -140,7 +143,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         case stopRecording:
             finishRecording(success: true)
             topButton.setImage(delete, for: .normal)
-            bottomButton.setImage(play, for: .normal)
+            bottomButton.setImage(evernote, for: .normal)
             preparePlayback()
             
         // Playback
@@ -164,9 +167,35 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             
         // Export
         case evernote:
-            print("Evernote export not implemented yet.")
-            topButton.setImage(settings, for: .normal)
-            bottomButton.setImage(rec, for: .normal)
+            if let noteRef = noteRef {
+                // open note in evernote
+            }
+            
+            if !ENSession.shared.isAuthenticated {
+                ENSession.shared.authenticate(with: self, preferRegistration: false, completion: {
+                    error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                })
+            }
+            // Send recording to Evernote
+            let note = ENNote()
+            let date = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd [hh:mm]"
+            note.title = formatter.string(from: date)
+            let data = try? Data(contentsOf: audioURL)
+            let resource = ENResource(data: data!, mimeType: "audio/mp4a-latm")
+            note.add(resource)
+            // note.content = ENNoteContent(string: "This is my fourth note. I wonder if this works.")
+            ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
+                if let error = error { print(error.localizedDescription) }
+                self.noteRef = noteRef
+            })
+            //topButton.setImage(settings, for: .normal)
+            //bottomButton.setImage(rec, for: .normal)
         case dropbox:
             print("Dropbox export not implemented yet.")
             topButton.setImage(settings, for: .normal)
