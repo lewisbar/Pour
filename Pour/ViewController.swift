@@ -74,7 +74,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     private func prepareAudioRecorder() {
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 12000,
+            AVSampleRateKey: 44100,
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
@@ -187,8 +187,8 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             formatter.dateFormat = "yyyy-MM-dd [hh:mm]"
             note.title = formatter.string(from: date)
             let data = try? Data(contentsOf: audioURL)
-            let resource = ENResource(data: data!, mimeType: "audio/mp4a-latm")
-            note.add(resource)
+            let resource = ENResource(data: data!, mimeType: "audio/mp4a-latm", filename: "rec.m4a")
+            note.add(resource!)
             // note.content = ENNoteContent(string: "This is my fourth note. I wonder if this works.")
             ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
                 if let error = error { print(error.localizedDescription) }
