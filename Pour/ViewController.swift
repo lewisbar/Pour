@@ -182,12 +182,16 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             }
             // Send recording to Evernote
             let note = ENNote()
+            
             let date = Date()
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd [hh:mm]"
-            note.title = formatter.string(from: date)
+            let title = formatter.string(from: date)
+            note.title = title
+            
             let data = try? Data(contentsOf: audioURL)
-            let resource = ENResource(data: data!, mimeType: "audio/mp4a-latm", filename: "rec.m4a")
+            let filename = title + ".m4a"
+            let resource = ENResource(data: data!, mimeType: "audio/mp4a-latm", filename: filename)
             note.add(resource!)
             // note.content = ENNoteContent(string: "This is my fourth note. I wonder if this works.")
             ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
