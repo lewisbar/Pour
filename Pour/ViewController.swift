@@ -171,7 +171,6 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         case evernote:
             authentificateEvernote()
             sendToEvernote()
-            showBanner(text: "Done. Tap here to open in Evernote.")
             topButton.setImage(settings, for: .normal)
             bottomButton.setImage(rec, for: .normal)
 
@@ -249,6 +248,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
                 if let error = error { print(error.localizedDescription) }
                 self.noteRef = noteRef
+                self.showBanner(text: "Done. Tap here to open in Evernote.")
             })
         } catch {
             print("Recording file cannot be converted to Data type")
