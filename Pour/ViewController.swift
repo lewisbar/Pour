@@ -250,6 +250,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
                 if let error = error { print(error.localizedDescription) }
                 self.noteRef = noteRef
+                // TODO: On successful completion, replace evernote icon with check mark (or do something else to show to the user that it's done)
             })
         } catch {
             print("Recording file cannot be converted to Data type")
