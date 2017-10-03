@@ -25,7 +25,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     var isRecordingAllowed = false
     lazy var audioURL = getDocumentsDirectory().appendingPathComponent("recording.m4a", isDirectory: false)
     
-    var noteRef: ENNoteRef?
+    // var noteRef: ENNoteRef?
     
     // Images
     let settings =  #imageLiteral(resourceName: "Settings Button")
@@ -249,8 +249,8 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             // note.content = ENNoteContent(string: "This is my fourth note. I wonder if this works.")
             ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
                 if let error = error { print(error.localizedDescription) }
-                self.noteRef = noteRef
-                // TODO: On successful completion, replace evernote icon with check mark (or do something else to show to the user that it's done)
+                // self.noteRef = noteRef
+                // TODO: On successful completion, replace evernote icon with check mark (or do something else to show to the user that it's done). Then probably return to the start screen
             })
         } catch {
             print("Recording file cannot be converted to Data type")
