@@ -19,13 +19,15 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     // Recording
     @IBOutlet weak var topButton: UIButton!
     @IBOutlet weak var bottomButton: UIButton!
+    @IBOutlet weak var banner: UIButton!
+    @IBOutlet weak var bannerBottomToViewTop: NSLayoutConstraint!
     var audioSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
     var isRecordingAllowed = false
     lazy var audioURL = getDocumentsDirectory().appendingPathComponent("recording.m4a", isDirectory: false)
     
-    // var noteRef: ENNoteRef?
+    var noteRef: ENNoteRef?
     
     // Images
     let settings =  #imageLiteral(resourceName: "Settings Button")
@@ -169,6 +171,9 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         case evernote:
             authentificateEvernote()
             sendToEvernote()
+            showBanner(text: "Done. Tap here to open in Evernote.")
+            topButton.setImage(settings, for: .normal)
+            bottomButton.setImage(rec, for: .normal)
 
         case dropbox:
             print("Dropbox export not implemented yet.")
@@ -189,7 +194,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             audioPlayer?.prepareToPlay()
         }
         catch {
-            alert(title: "File could not be opened", message: "Please contact RecFlow support")
+            alert(title: "File could not be opened", message: "Please contact Pour support")
             topButton.setImage(settings, for: .normal)
             bottomButton.setImage(rec, for: .normal)
         }
@@ -201,7 +206,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         if success {
             // print("Recording finished successfully")
         } else {
-            alert(title: "Recording failed", message: "Please contact RecFlow support")
+            alert(title: "Recording failed", message: "Please contact Pour support")
             topButton.setImage(settings, for: .normal)
             bottomButton.setImage(rec, for: .normal)
         }
@@ -243,15 +248,47 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             // note.content = ENNoteContent(string: "This is my fourth note. I wonder if this works.")
             ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
                 if let error = error { print(error.localizedDescription) }
-                // self.noteRef = noteRef
-                // TODO: On successful completion, replace evernote icon with check mark (or do something else to show to the user that it's done). Then probably return to the start screen
-                
-                //topButton.setImage(settings, for: .normal)
-                //bottomButton.setImage(rec, for: .normal)
+                self.noteRef = noteRef
             })
         } catch {
             print("Recording file cannot be converted to Data type")
             alert(title: "Export failed", message: "Recording file cannot be converted to Data type.")
+        }
+    }
+    
+    private func showBanner(text: String) {
+        banner.titleLabel?.adjustsFontSizeToFitWidth = true
+        banner.setTitle(text, for: .normal)
+
+        // Animate banner down
+        UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
+            self.bannerBottomToViewTop.constant = self.banner.frame.height
+            self.view.layoutIfNeeded()
+            // Get over the status bar:
+            self.view.window?.windowLevel = UIWindowLevelStatusBar+1
+        }, completion: { finished in
+            /* Empty animation to create a phase where the banner is tappable
+             Because during an animation, the destination is tappable, not the image of the button on its way to that destination. On the way back up, that destination is off screen.*/
+            UIView.animate(withDuration: 0.01, delay: 1.5, options: .allowUserInteraction, animations: {
+                self.banner.backgroundColor = .darkGray
+            }, completion: { finished in
+                // Animate banner back up after delay
+                UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
+                    self.bannerBottomToViewTop.constant = 0
+                    self.view.layoutIfNeeded()
+                }, completion: { finished in
+                    self.view.window?.windowLevel = UIWindowLevelNormal
+                    self.banner.backgroundColor = .black
+                })
+            })
+        })
+    }
+    
+    @IBAction func bannerTouched(_ sender: UIButton) {
+        print("banner touched")
+        if let noteRef = noteRef {
+            print("noteRef exists")
+            ENSession.shared.viewNoteInEvernote(noteRef)
         }
     }
 }
