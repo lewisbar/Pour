@@ -167,15 +167,9 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             
         // Export
         case evernote:
-            //            if let noteRef = noteRef {
-            //                // open note in evernote
-            //            }
-            
             authentificateEvernote()
             sendToEvernote()
-            
-            //topButton.setImage(settings, for: .normal)
-            //bottomButton.setImage(rec, for: .normal)
+
         case dropbox:
             print("Dropbox export not implemented yet.")
             topButton.setImage(settings, for: .normal)
@@ -251,6 +245,9 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
                 if let error = error { print(error.localizedDescription) }
                 // self.noteRef = noteRef
                 // TODO: On successful completion, replace evernote icon with check mark (or do something else to show to the user that it's done). Then probably return to the start screen
+                
+                //topButton.setImage(settings, for: .normal)
+                //bottomButton.setImage(rec, for: .normal)
             })
         } catch {
             print("Recording file cannot be converted to Data type")
