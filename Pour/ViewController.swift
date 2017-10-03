@@ -167,37 +167,13 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             
         // Export
         case evernote:
-            if let noteRef = noteRef {
-                // open note in evernote
-            }
+            //            if let noteRef = noteRef {
+            //                // open note in evernote
+            //            }
             
-            if !ENSession.shared.isAuthenticated {
-                ENSession.shared.authenticate(with: self, preferRegistration: false, completion: {
-                    error in
-                    if let error = error {
-                        print(error.localizedDescription)
-                        return
-                    }
-                })
-            }
-            // Send recording to Evernote
-            let note = ENNote()
+            authentificateEvernote()
+            sendToEvernote()
             
-            let date = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd [hh:mm]"
-            let title = formatter.string(from: date)
-            note.title = title
-            
-            let data = try? Data(contentsOf: audioURL)
-            let filename = title + ".m4a"
-            let resource = ENResource(data: data!, mimeType: "audio/mp4a-latm", filename: filename)
-            note.add(resource!)
-            // note.content = ENNoteContent(string: "This is my fourth note. I wonder if this works.")
-            ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
-                if let error = error { print(error.localizedDescription) }
-                self.noteRef = noteRef
-            })
             //topButton.setImage(settings, for: .normal)
             //bottomButton.setImage(rec, for: .normal)
         case dropbox:
@@ -240,6 +216,45 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     // MARK: - AVAudioPlayerDelegate
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         bottomButton.setImage(play, for: .normal)
+    }
+    
+    // MARK: - Evernote Integration
+    private func authentificateEvernote() {
+        if !ENSession.shared.isAuthenticated {
+            ENSession.shared.authenticate(with: self, preferRegistration: false, completion: {
+                error in
+                if let error = error {
+                    self.alert(title: "Authentification failed", message: "Please try again.")
+                    print(error.localizedDescription)
+                    return
+                }
+            })
+        }
+    }
+    
+    private func sendToEvernote() {
+        do {
+            let note = ENNote()
+            
+            let date = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd [hh:mm]"
+            let title = formatter.string(from: date)
+            note.title = title
+            
+            let data = try Data(contentsOf: audioURL)
+            let filename = title + ".m4a"
+            let resource = ENResource(data: data, mimeType: "audio/mp4a-latm", filename: filename)
+            note.add(resource!)
+            // note.content = ENNoteContent(string: "This is my fourth note. I wonder if this works.")
+            ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
+                if let error = error { print(error.localizedDescription) }
+                self.noteRef = noteRef
+            })
+        } catch {
+            print("Recording file cannot be converted to Data type")
+            alert(title: "Export failed", message: "Recording file cannot be converted to Data type.")
+        }
     }
 }
 
