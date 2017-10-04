@@ -248,7 +248,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
                 if let error = error { print(error.localizedDescription) }
                 self.noteRef = noteRef
-                self.showBanner(text: "Done. Tap here to open in Evernote.")
+                self.showBanner(text: "Upload complete. Tap here to open in Evernote.")
             })
         } catch {
             print("Recording file cannot be converted to Data type")
@@ -257,9 +257,11 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     }
     
     private func showBanner(text: String) {
+        let showDuration = 3.0
         banner.titleLabel?.adjustsFontSizeToFitWidth = true
         banner.setTitle(text, for: .normal)
         banner.backgroundColor = .darkGray
+        banner.alpha = 1
 
         // Animate banner down
         UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
@@ -269,7 +271,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         }, completion: { finished in
             /* Empty animation to create a phase where the banner is tappable
              Because during an animation, the destination is tappable, not the image of the button on its way to that destination. On the way back up, that destination is off screen.*/
-            UIView.animate(withDuration: 0.01, delay: 1.5, options: .allowUserInteraction, animations: {
+            UIView.animate(withDuration: 0.01, delay: showDuration, options: .allowUserInteraction, animations: {
                 self.banner.backgroundColor = .darkGray
             }, completion: { finished in
                 // Animate banner back up after delay
@@ -277,7 +279,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
                     self.bannerHeight.constant = 0
                     self.view.layoutIfNeeded()
                 }, completion: { finished in
-                    self.banner.backgroundColor = .black
+                    self.banner.alpha = 0
                 })
             })
         })
