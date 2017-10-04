@@ -20,7 +20,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     @IBOutlet weak var topButton: UIButton!
     @IBOutlet weak var bottomButton: UIButton!
     @IBOutlet weak var banner: UIButton!
-    @IBOutlet weak var bannerBottomToViewTop: NSLayoutConstraint!
+    @IBOutlet weak var bannerHeight: NSLayoutConstraint!
     var audioSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
@@ -259,13 +259,13 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     private func showBanner(text: String) {
         banner.titleLabel?.adjustsFontSizeToFitWidth = true
         banner.setTitle(text, for: .normal)
+        banner.backgroundColor = .darkGray
 
         // Animate banner down
         UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
-            self.bannerBottomToViewTop.constant = self.banner.frame.height
+            self.bannerHeight.constant = 64 // TODO: Don't hardcode
             self.view.layoutIfNeeded()
-            // Get over the status bar:
-            self.view.window?.windowLevel = UIWindowLevelStatusBar+1
+            self.banner.backgroundColor = .black
         }, completion: { finished in
             /* Empty animation to create a phase where the banner is tappable
              Because during an animation, the destination is tappable, not the image of the button on its way to that destination. On the way back up, that destination is off screen.*/
@@ -274,10 +274,9 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             }, completion: { finished in
                 // Animate banner back up after delay
                 UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
-                    self.bannerBottomToViewTop.constant = 0
+                    self.bannerHeight.constant = 0
                     self.view.layoutIfNeeded()
                 }, completion: { finished in
-                    self.view.window?.windowLevel = UIWindowLevelNormal
                     self.banner.backgroundColor = .black
                 })
             })
