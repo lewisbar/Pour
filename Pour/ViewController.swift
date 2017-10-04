@@ -263,18 +263,17 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         banner.backgroundColor = .darkGray
         banner.alpha = 1
 
-        // Animate banner down
+        // Animate banner expansion
         UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
             self.bannerHeight.constant = 64 // TODO: Don't hardcode
             self.view.layoutIfNeeded()
             self.banner.backgroundColor = .black
         }, completion: { finished in
-            /* Empty animation to create a phase where the banner is tappable
-             Because during an animation, the destination is tappable, not the image of the button on its way to that destination. On the way back up, that destination is off screen.*/
+            // Tappable phase
             UIView.animate(withDuration: 0.01, delay: showDuration, options: .allowUserInteraction, animations: {
                 self.banner.backgroundColor = .darkGray
             }, completion: { finished in
-                // Animate banner back up after delay
+                // Animate disappearing banner
                 UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
                     self.bannerHeight.constant = 0
                     self.view.layoutIfNeeded()
