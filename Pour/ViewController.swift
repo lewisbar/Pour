@@ -21,6 +21,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     @IBOutlet weak var bottomButton: UIButton!
     @IBOutlet weak var banner: UIButton!
     @IBOutlet weak var bannerHeight: NSLayoutConstraint!
+    @IBOutlet weak var progressView: UIProgressView!
     var audioSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
@@ -240,28 +241,38 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     }
     
     private func sendToEvernote() {
+        let progressHandler: ENSessionProgressHandler = { progress in
+            self.progressView.progress = Float(progress)
+            self.progressView.alpha = 1
+            print("Progress:", progress)
+        }
+        
+        let completionHandler: ENSessionUploadNoteCompletionHandler = { (noteRef, error) in
+            if let error = error { print(error.localizedDescription) }
+            self.noteRef = noteRef
+            self.progressView.alpha = 0
+            self.showBanner(text: "Upload complete. Tap here to open in Evernote.")
+        }
+        
         do {
             let note = ENNote()
-            
-            let date = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd [hh:mm]"
-            let title = formatter.string(from: date)
-            note.title = title
-            
-            let data = try Data(contentsOf: audioURL)
+            let title = titleFromCurrentDate()
             let filename = title + ".m4a"
-            let resource = ENResource(data: data, mimeType: "audio/mp4a-latm", filename: filename)
-            note.add(resource!)
-            // note.content = ENNoteContent(string: "This is my fourth note. I wonder if this works.")
-            ENSession.shared.upload(note, notebook: nil, completion: { (noteRef, error) in
-                if let error = error { print(error.localizedDescription) }
-                self.noteRef = noteRef
-                self.showBanner(text: "Upload complete. Tap here to open in Evernote.")
-            })
+
+            note.title = title
+
+            let data = try Data(contentsOf: audioURL)
+            guard let resource = ENResource(data: data, mimeType: "audio/mp4a-latm", filename: filename)
+                else {
+                    alert(title: "Export failed", message: "Audio file could not be attached to note.")
+                    return
+            }
+            
+            note.add(resource)
+            
+            ENSession.shared.upload(note, policy: .create, to: nil, orReplace: nil, progress: progressHandler, completion: completionHandler)
         } catch {
-            print("Recording file cannot be converted to Data type")
-            alert(title: "Export failed", message: "Recording file cannot be converted to Data type.")
+            alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
         }
     }
     
@@ -291,6 +302,14 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
                 })
             })
         })
+    }
+    
+    func titleFromCurrentDate() -> String {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd [hh:mm]"
+        let title = formatter.string(from: date)
+        return title
     }
     
     @IBAction func bannerTouched(_ sender: UIButton) {
