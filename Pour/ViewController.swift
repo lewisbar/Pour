@@ -179,10 +179,11 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             
         // Export
         case evernote:
-            authentificateEvernote()
-            sendToEvernote()
-            topButton.setImage(settings, for: .normal)
-            bottomButton.setImage(rec, for: .normal)
+            if authenticateEvernote() {
+                sendToEvernote()
+                topButton.setImage(settings, for: .normal)
+                bottomButton.setImage(rec, for: .normal)
+            }
 
         case dropbox:
             print("Dropbox export not implemented yet.")
@@ -227,17 +228,17 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     }
     
     // MARK: - Evernote Integration
-    private func authentificateEvernote() {
+    private func authenticateEvernote() -> Bool {
         if !ENSession.shared.isAuthenticated {
             ENSession.shared.authenticate(with: self, preferRegistration: false, completion: {
                 error in
                 if let error = error {
                     self.alert(title: "Authentification failed", message: "Please try again.")
                     print(error.localizedDescription)
-                    return
                 }
             })
         }
+        return ENSession.shared.isAuthenticated
     }
     
     private func sendToEvernote() {
