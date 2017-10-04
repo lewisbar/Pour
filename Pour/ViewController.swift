@@ -96,6 +96,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         if device.isProximityMonitoringEnabled {
             NotificationCenter.default.addObserver(self, selector: #selector(handleProximityChange), name: NSNotification.Name.UIDeviceProximityStateDidChange, object: nil)
         }
+        device.isProximityMonitoringEnabled = false
     }
     
     @objc private func handleProximityChange(notification: Notification) {
@@ -133,35 +134,43 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
                 audioRecorder?.record()
                 topButton.setImage(self.pauseRecording, for: .normal)
                 bottomButton.setImage(self.stopRecording, for: .normal)
+                UIDevice.current.isProximityMonitoringEnabled = true
             } else {
                 self.alert(title: "Microphone Access Denied", message: "Seems like you denied microphone permission. You can allow microphone access under Settings > Privacy > Microphone.")
             }
         case pauseRecording:
             audioRecorder?.pause()
+            UIDevice.current.isProximityMonitoringEnabled = false
             topButton.setImage(unpauseRecording, for: .normal)
         case unpauseRecording:
             audioRecorder?.record()
+            UIDevice.current.isProximityMonitoringEnabled = true
             topButton.setImage(pauseRecording, for: .normal)
         case stopRecording:
             finishRecording(success: true)
+            UIDevice.current.isProximityMonitoringEnabled = false
             topButton.setImage(delete, for: .normal)
             bottomButton.setImage(evernote, for: .normal)
             preparePlayback()
             
-        // Playback
-        case play:
-            audioPlayer?.play()
-            bottomButton.setImage(pausePlayback, for: .normal)
-        case pausePlayback:
-            audioPlayer?.pause()
-            bottomButton.setImage(unpausePlayback, for: .normal)
-        case unpausePlayback:
-            audioPlayer?.play()
-            bottomButton.setImage(pausePlayback, for: .normal)
+//        // Playback
+//        case play:
+//            audioPlayer?.play()
+//            UIDevice.current.isProximityMonitoringEnabled = true
+//            bottomButton.setImage(pausePlayback, for: .normal)
+//        case pausePlayback:
+//            audioPlayer?.pause()
+//            UIDevice.current.isProximityMonitoringEnabled = false
+//            bottomButton.setImage(unpausePlayback, for: .normal)
+//        case unpausePlayback:
+//            audioPlayer?.play()
+//            UIDevice.current.isProximityMonitoringEnabled = true
+//            bottomButton.setImage(pausePlayback, for: .normal)
             
         // Deletion
         case delete:
             audioPlayer?.stop()
+            UIDevice.current.isProximityMonitoringEnabled = false
             // audioRecorder?.deleteRecording() // File gets overridden by prepareToRecord() anyway
             audioRecorder?.prepareToRecord()
             topButton.setImage(settings, for: .normal)
