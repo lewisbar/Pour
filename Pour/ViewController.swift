@@ -242,11 +242,12 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     }
     
     private func sendToEvernote() {
-        let progressHandler: ENSessionProgressHandler = { progress in
-            self.progressView.progress = Float(progress)
-            self.progressView.alpha = 1
-            print("Progress:", progress)
-        }
+        // No longer supported by Evernote SDK:
+//        let progressHandler: ENSessionProgressHandler = { progress in
+//            self.progressView.progress = Float(progress)
+//            self.progressView.alpha = 1
+//            print("Progress:", progress)
+//        }
         
         let completionHandler: ENSessionUploadNoteCompletionHandler = { (noteRef, error) in
             if let error = error { print(error.localizedDescription) }
@@ -270,8 +271,8 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             }
             
             note.add(resource)
-            
-            ENSession.shared.upload(note, policy: .create, to: nil, orReplace: nil, progress: progressHandler, completion: completionHandler)
+            ENSession.shared.upload(note, notebook: nil, completion: completionHandler)
+            //ENSession.shared.upload(note, policy: .create, to: nil, orReplace: nil, progress: progressHandler, completion: completionHandler)
         } catch {
             alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
         }
