@@ -15,12 +15,14 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     // TODO: Preserve ViewController state when the app is closed
     // (otherwise you're not able to get to a not-yet-deleted recording because the start screen is shown)
     
-    // MARK: - Properties
     // Recording
     @IBOutlet weak var topButton: UIButton!
     @IBOutlet weak var bottomButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var banner: UIButton!
     @IBOutlet weak var bannerHeight: NSLayoutConstraint!
+    @IBOutlet weak var activityViewWidth: NSLayoutConstraint!
+    @IBOutlet weak var activityViewHeight: NSLayoutConstraint!
     @IBOutlet weak var progressView: UIProgressView!
     var audioSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder?
@@ -43,7 +45,6 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     let evernote = #imageLiteral(resourceName: "Evernote Button")
     let dropbox = #imageLiteral(resourceName: "Dropbox Button")
     
-    // MARK: - Preparation on launch
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,71 +53,11 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         prepareProximityMonitoring()
     }
     
-    private func prepareAudioSession() {
-        audioSession = AVAudioSession.sharedInstance()
-        var options: AVAudioSessionCategoryOptions = [.defaultToSpeaker, .allowBluetooth]
-        if #available(iOS 10.0, *) {
-            options.insert([.allowAirPlay, .allowBluetoothA2DP])
-        }
-        
-        do {
-            try audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord, with: options)
-            try audioSession?.setActive(true)
-            audioSession?.requestRecordPermission() { [unowned self] allowed in
-                if allowed {
-                    self.isRecordingAllowed = true
-                } else {
-                    self.alert(title: "Microphone Access Denied", message: "Seems like you denied microphone permission. To allow microphone access, go to Settings > Privacy > Microphone.")
-                }
-            }
-        } catch {
-            self.alert(title: "Recording failed", message: "Try restarting the app or contact RecFlow support.")
-        }
-    }
-    
-    private func prepareAudioRecorder() {
-        let settings = [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 44100,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
-        
-        do {
-            audioRecorder = try AVAudioRecorder(url: audioURL, settings: settings)
-            audioRecorder?.delegate = self
-            audioRecorder?.prepareToRecord()
-        } catch {
-            finishRecording(success: false)
-        }
-    }
-    
-    private func prepareProximityMonitoring() {
-        let device = UIDevice.current
-        device.isProximityMonitoringEnabled = true
-        if device.isProximityMonitoringEnabled {
-            NotificationCenter.default.addObserver(self, selector: #selector(handleProximityChange), name: NSNotification.Name.UIDeviceProximityStateDidChange, object: nil)
-        }
-        device.isProximityMonitoringEnabled = false
-    }
-    
-    @objc private func handleProximityChange(notification: Notification) {
-        // Switch speakers
-        if UIDevice.current.proximityState {
-            // Receiver
-            try? audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord)
-        } else {
-            // Speaker
-            try? audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord, with: .defaultToSpeaker)
-        }
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: - Button Pressed
     @IBAction func buttonPressed(_ sender: UIButton) {
         guard let currentImage = sender.image(for: .normal) else {
             print("Button can't be identified. Image missing.")
@@ -179,10 +120,28 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             
         // Export
         case evernote:
-            if authenticateEvernote() {
-                sendToEvernote()
-                topButton.setImage(settings, for: .normal)
-                bottomButton.setImage(rec, for: .normal)
+            EvernoteIntegration.authenticate(with: self) { error in
+                if let error = error {
+                    self.alert(title: "Error", message: error.localizedDescription)
+                    return
+                }
+                self.showActivity()
+                do {
+                    try EvernoteIntegration.send(audioURL: self.audioURL) { (noteRef, error) in
+                        if let error = error { print(error.localizedDescription) }
+                        self.noteRef = noteRef
+                        self.showBanner(text: "Upload complete. Tap here to open in Evernote.")
+                        self.hideActivity()
+                        self.topButton.setImage(self.settings, for: .normal)
+                        self.bottomButton.setImage(self.rec, for: .normal)
+                    }
+                } catch EvernoteIntegrationError.audioFileToData {
+                    self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
+                } catch EvernoteIntegrationError.dataToResource {
+                    self.alert(title: "Export failed", message: "Audio file could not be attached to note.")
+                } catch {
+                    self.alert(title: "Unknown error", message: "Please try again.")
+                }
             }
 
         case dropbox:
@@ -196,146 +155,14 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             break
         }
     }
-    
-    private func preparePlayback() {
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
-            audioPlayer?.delegate = self
-            audioPlayer?.prepareToPlay()
-        }
-        catch {
-            alert(title: "File could not be opened", message: "Please contact Pour support")
-            topButton.setImage(settings, for: .normal)
-            bottomButton.setImage(rec, for: .normal)
-        }
-    }
-    
-    private func finishRecording(success: Bool) {
-        audioRecorder?.stop()
-        
-        if success {
-            // print("Recording finished successfully")
-        } else {
-            alert(title: "Recording failed", message: "Please contact Pour support")
-            topButton.setImage(settings, for: .normal)
-            bottomButton.setImage(rec, for: .normal)
-        }
-    }
-    
-    // MARK: - AVAudioPlayerDelegate
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        bottomButton.setImage(play, for: .normal)
-    }
-    
-    // MARK: - Evernote Integration
-    private func authenticateEvernote() -> Bool {
-        if !ENSession.shared.isAuthenticated {
-            ENSession.shared.authenticate(with: self, preferRegistration: false, completion: {
-                error in
-                if let error = error {
-                    self.alert(title: "Authentification failed", message: "Please try again.")
-                    print(error.localizedDescription)
-                }
-            })
-        }
-        return ENSession.shared.isAuthenticated
-    }
-    
-    private func sendToEvernote() {
-        // No longer supported by Evernote SDK:
-//        let progressHandler: ENSessionProgressHandler = { progress in
-//            self.progressView.progress = Float(progress)
-//            self.progressView.alpha = 1
-//            print("Progress:", progress)
-//        }
-        
-        let completionHandler: ENSessionUploadNoteCompletionHandler = { (noteRef, error) in
-            if let error = error { print(error.localizedDescription) }
-            self.noteRef = noteRef
-            self.progressView.alpha = 0
-            self.showBanner(text: "Upload complete. Tap here to open in Evernote.")
-        }
-        
-        do {
-            let note = ENNote()
-            let title = titleFromCurrentDate()
-            let filename = title + ".m4a"
-
-            note.title = title
-
-            let data = try Data(contentsOf: audioURL)
-            guard let resource = ENResource(data: data, mimeType: "audio/mp4a-latm", filename: filename)
-                else {
-                    alert(title: "Export failed", message: "Audio file could not be attached to note.")
-                    return
-            }
-            
-            note.add(resource)
-            ENSession.shared.upload(note, notebook: nil, completion: completionHandler)
-            //ENSession.shared.upload(note, policy: .create, to: nil, orReplace: nil, progress: progressHandler, completion: completionHandler)
-        } catch {
-            alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
-        }
-    }
-    
-    private func showBanner(text: String) {
-        let showDuration = 3.0
-        banner.titleLabel?.adjustsFontSizeToFitWidth = true
-        banner.setTitle(text, for: .normal)
-        banner.backgroundColor = .darkGray
-        banner.alpha = 1
-
-        // Animate banner expansion
-        UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
-            self.bannerHeight.constant = 64 // TODO: Don't hardcode
-            self.view.layoutIfNeeded()
-            self.banner.backgroundColor = .black
-        }, completion: { finished in
-            // Tappable phase
-            UIView.animate(withDuration: 0.01, delay: showDuration, options: .allowUserInteraction, animations: {
-                self.banner.backgroundColor = .darkGray
-            }, completion: { finished in
-                // Animate disappearing banner
-                UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
-                    self.bannerHeight.constant = 0
-                    self.view.layoutIfNeeded()
-                }, completion: { finished in
-                    self.banner.alpha = 0
-                })
-            })
-        })
-    }
-    
-    func titleFromCurrentDate() -> String {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd [hh:mm]"
-        let title = formatter.string(from: date)
-        return title
-    }
-    
-    @IBAction func bannerTouched(_ sender: UIButton) {
-        print("banner touched")
-        if let noteRef = noteRef {
-            print("noteRef exists")
-            ENSession.shared.viewNoteInEvernote(noteRef)
-        }
-    }
 }
-
+    
 // MARK: - General Helpers
 extension ViewController {
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
         return documentsDirectory
-    }
-    
-    func alert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let defaultAction = UIAlertAction(title: "Close", style: .default, handler: nil)
-        alertController.addAction(defaultAction)
-        self.present(alertController, animated: true, completion: nil)
     }
 }
 

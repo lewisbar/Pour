@@ -54,6 +54,22 @@
                                 <color key="progressTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="trackTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </progressView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2AB-af-KBi" userLabel="Activity View">
+                                <rect key="frame" x="187.5" y="333.5" width="0.0" height="0.0"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="wcw-iD-6mb">
+                                        <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" id="QaR-WE-bcf"/>
+                                    <constraint firstAttribute="height" id="XKk-pg-q0G"/>
+                                    <constraint firstItem="wcw-iD-6mb" firstAttribute="centerY" secondItem="2AB-af-KBi" secondAttribute="centerY" id="cJC-9N-cQL"/>
+                                    <constraint firstItem="wcw-iD-6mb" firstAttribute="centerX" secondItem="2AB-af-KBi" secondAttribute="centerX" id="xum-9C-Uxh"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -65,6 +81,7 @@
                             <constraint firstItem="hlw-r3-FEa" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="QPh-sj-pL0"/>
                             <constraint firstItem="R4e-Ld-jFk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="V4H-Wg-2Hk"/>
                             <constraint firstItem="hlw-r3-FEa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="VCV-tz-XsS"/>
+                            <constraint firstItem="2AB-af-KBi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Vrf-C5-aEj"/>
                             <constraint firstItem="pHo-SB-Cub" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Xvt-N8-SPa"/>
                             <constraint firstAttribute="trailing" secondItem="pHo-SB-Cub" secondAttribute="trailing" id="Z2u-AO-ULG"/>
                             <constraint firstItem="R4e-Ld-jFk" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="aWn-yf-rEr"/>
@@ -75,10 +92,14 @@
                             <constraint firstItem="pHo-SB-Cub" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="sQZ-Ct-cUh"/>
                             <constraint firstAttribute="centerY" secondItem="R4e-Ld-jFk" secondAttribute="bottom" id="tVc-2x-gD9"/>
                             <constraint firstItem="yLp-4g-Mqq" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="v85-jv-TPS"/>
+                            <constraint firstItem="2AB-af-KBi" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="wkb-LI-E5K"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="wcw-iD-6mb" id="UPq-2F-Vff"/>
+                        <outlet property="activityViewHeight" destination="XKk-pg-q0G" id="wfJ-2y-NRY"/>
+                        <outlet property="activityViewWidth" destination="QaR-WE-bcf" id="GeB-82-HQe"/>
                         <outlet property="banner" destination="yLp-4g-Mqq" id="lN0-U8-3ar"/>
                         <outlet property="bannerHeight" destination="3b7-u2-Rtt" id="Q6Z-HD-IX1"/>
                         <outlet property="bottomButton" destination="hsL-np-i1K" id="E6u-Bn-0ol"/>
