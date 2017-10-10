@@ -14,7 +14,7 @@
 		30E4416B1F7D3F8F00FC8463 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30E4416A1F7D3F8F00FC8463 /* Assets.xcassets */; };
 		30E4416E1F7D3F8F00FC8463 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30E4416C1F7D3F8F00FC8463 /* LaunchScreen.storyboard */; };
 		30E8E4711F8BA092000AEA37 /* ViewController+AppearingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E8E4701F8BA092000AEA37 /* ViewController+AppearingViews.swift */; };
-		30E8E4731F8BA2FA000AEA37 /* ViewController+Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E8E4721F8BA2FA000AEA37 /* ViewController+Audio.swift */; };
+		30E8E4731F8BA2FA000AEA37 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E8E4721F8BA2FA000AEA37 /* Audio.swift */; };
 		30E8E4751F8C1B5C000AEA37 /* EvernoteIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E8E4741F8C1B5C000AEA37 /* EvernoteIntegration.swift */; };
 		B42B0ADE357D0D2940A5DE84 /* Pods_Pour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050D10F1F8F773A72A561EE8 /* Pods_Pour.framework */; };
 /* End PBXBuildFile section */
@@ -30,7 +30,7 @@
 		30E4416D1F7D3F8F00FC8463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		30E4416F1F7D3F8F00FC8463 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		30E8E4701F8BA092000AEA37 /* ViewController+AppearingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+AppearingViews.swift"; sourceTree = "<group>"; };
-		30E8E4721F8BA2FA000AEA37 /* ViewController+Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Audio.swift"; sourceTree = "<group>"; };
+		30E8E4721F8BA2FA000AEA37 /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		30E8E4741F8C1B5C000AEA37 /* EvernoteIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvernoteIntegration.swift; sourceTree = "<group>"; };
 		8FE0D44A2F707DB44CEFF0E6 /* Pods-Pour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pour.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pour/Pods-Pour.release.xcconfig"; sourceTree = "<group>"; };
 		CA92D373141253449D509563 /* Pods-Pour.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pour.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pour/Pods-Pour.debug.xcconfig"; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 				30E441631F7D3F8F00FC8463 /* AppDelegate.swift */,
 				30E441651F7D3F8F00FC8463 /* ViewController.swift */,
 				30E8E4701F8BA092000AEA37 /* ViewController+AppearingViews.swift */,
-				30E8E4721F8BA2FA000AEA37 /* ViewController+Audio.swift */,
+				30E8E4721F8BA2FA000AEA37 /* Audio.swift */,
 				30E8E4741F8C1B5C000AEA37 /* EvernoteIntegration.swift */,
 				30E441671F7D3F8F00FC8463 /* Main.storyboard */,
 				30E4416A1F7D3F8F00FC8463 /* Assets.xcassets */,
@@ -232,7 +232,7 @@
 				30E8E4711F8BA092000AEA37 /* ViewController+AppearingViews.swift in Sources */,
 				30E441661F7D3F8F00FC8463 /* ViewController.swift in Sources */,
 				30E8E4751F8C1B5C000AEA37 /* EvernoteIntegration.swift in Sources */,
-				30E8E4731F8BA2FA000AEA37 /* ViewController+Audio.swift in Sources */,
+				30E8E4731F8BA2FA000AEA37 /* Audio.swift in Sources */,
 				30C9A00D1F820A1D00A256D4 /* Keys.swift in Sources */,
 				30E441641F7D3F8F00FC8463 /* AppDelegate.swift in Sources */,
 			);

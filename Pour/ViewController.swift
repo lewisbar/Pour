@@ -24,11 +24,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var activityViewWidth: NSLayoutConstraint!
     @IBOutlet weak var activityViewHeight: NSLayoutConstraint!
     @IBOutlet weak var progressView: UIProgressView!
-    var audioSession: AVAudioSession?
-    var audioRecorder: AVAudioRecorder?
-    var audioPlayer: AVAudioPlayer?
-    var isRecordingAllowed = false
-    lazy var audioURL = getDocumentsDirectory().appendingPathComponent("recording.m4a", isDirectory: false)
+    let audio = Audio()
     
     var noteRef: ENNoteRef?
     
@@ -48,9 +44,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        prepareAudioSession()
-        prepareAudioRecorder()
-        prepareProximityMonitoring()
+        do {
+            try audio.prepareAudioSession()
+            try audio.prepareAudioRecorder(url: getDocumentsDirectory().appendingPathComponent("recording.m4a", isDirectory: false)
+)
+            audio.prepareProximityMonitoring()
+        } catch {
+            alert(title: "Error", message: error.localizedDescription)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -72,49 +73,45 @@ class ViewController: UIViewController {
             
         // Recording
         case rec:
-            if isRecordingAllowed {
-                audioRecorder?.record()
+            do {
+                try audio.record()
                 topButton.setImage(self.pauseRecording, for: .normal)
                 bottomButton.setImage(self.stopRecording, for: .normal)
-                UIDevice.current.isProximityMonitoringEnabled = true
-            } else {
-                self.alert(title: "Microphone Access Denied", message: "Seems like you denied microphone permission. You can allow microphone access under Settings > Privacy > Microphone.")
+            } catch {
+                alert(title: "Error", message: error.localizedDescription)
             }
+
         case pauseRecording:
-            audioRecorder?.pause()
-            UIDevice.current.isProximityMonitoringEnabled = false
+            audio.pauseRecording()
             topButton.setImage(unpauseRecording, for: .normal)
         case unpauseRecording:
-            audioRecorder?.record()
-            UIDevice.current.isProximityMonitoringEnabled = true
+            audio.unpauseRecording()
             topButton.setImage(pauseRecording, for: .normal)
         case stopRecording:
-            finishRecording(success: true)
-            UIDevice.current.isProximityMonitoringEnabled = false
+            audio.stopRecording()
+            do {
+                try audio.preparePlayback()
+            } catch {
+                alert(title: "Error", message: error.localizedDescription)
+            }
             topButton.setImage(delete, for: .normal)
             bottomButton.setImage(evernote, for: .normal)
-            preparePlayback()
             
 //        // Playback
 //        case play:
-//            audioPlayer?.play()
-//            UIDevice.current.isProximityMonitoringEnabled = true
+//            audio.play()
 //            bottomButton.setImage(pausePlayback, for: .normal)
 //        case pausePlayback:
-//            audioPlayer?.pause()
-//            UIDevice.current.isProximityMonitoringEnabled = false
+//            audio.pausePlayback()
 //            bottomButton.setImage(unpausePlayback, for: .normal)
 //        case unpausePlayback:
-//            audioPlayer?.play()
-//            UIDevice.current.isProximityMonitoringEnabled = true
+//            audio.unpausePlayback()
 //            bottomButton.setImage(pausePlayback, for: .normal)
             
         // Deletion
         case delete:
-            audioPlayer?.stop()
-            UIDevice.current.isProximityMonitoringEnabled = false
-            // audioRecorder?.deleteRecording() // File gets overridden by prepareToRecord() anyway
-            audioRecorder?.prepareToRecord()
+            audio.stopPlayback()
+            audio.deleteRecording()
             topButton.setImage(settings, for: .normal)
             bottomButton.setImage(rec, for: .normal)
             
@@ -127,7 +124,11 @@ class ViewController: UIViewController {
                 }
                 self.showActivity()
                 do {
-                    try EvernoteIntegration.send(audioURL: self.audioURL) { (noteRef, error) in
+                    guard let audioURL = self.audio.url else {
+                        self.alert(title: "Error", message: "Recording not found")
+                        return
+                    }
+                    try EvernoteIntegration.send(audioURL: audioURL) { (noteRef, error) in
                         if let error = error { print(error.localizedDescription) }
                         self.noteRef = noteRef
                         self.showBanner(text: "Upload complete. Tap here to open in Evernote.")
