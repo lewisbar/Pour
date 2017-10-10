@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -22,39 +23,87 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R4e-Ld-jFk">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="343.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="333.5"/>
                                 <state key="normal" image="Settings Button"/>
                                 <connections>
                                     <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FV0-QF-KlG"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hsL-np-i1K">
-                                <rect key="frame" x="0.0" y="343.5" width="375" height="323.5"/>
+                                <rect key="frame" x="0.0" y="333.5" width="375" height="333.5"/>
                                 <state key="normal" image="Rec Button"/>
                                 <connections>
                                     <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VKb-dV-jMl"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLp-4g-Mqq" userLabel="Banner">
+                                <rect key="frame" x="0.0" y="333.5" width="375" height="0.0"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" id="3b7-u2-Rtt"/>
+                                </constraints>
+                                <state key="normal">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="bannerTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XSe-C7-snl"/>
+                                </connections>
+                            </button>
+                            <progressView opaque="NO" alpha="0.0" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pHo-SB-Cub">
+                                <rect key="frame" x="0.0" y="332.5" width="375" height="2"/>
+                                <color key="progressTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="trackTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </progressView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2AB-af-KBi" userLabel="Activity View">
+                                <rect key="frame" x="187.5" y="333.5" width="0.0" height="0.0"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="wcw-iD-6mb">
+                                        <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" id="QaR-WE-bcf"/>
+                                    <constraint firstAttribute="height" id="XKk-pg-q0G"/>
+                                    <constraint firstItem="wcw-iD-6mb" firstAttribute="centerY" secondItem="2AB-af-KBi" secondAttribute="centerY" id="cJC-9N-cQL"/>
+                                    <constraint firstItem="wcw-iD-6mb" firstAttribute="centerX" secondItem="2AB-af-KBi" secondAttribute="centerX" id="xum-9C-Uxh"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="yLp-4g-Mqq" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="76n-eW-ACQ"/>
                             <constraint firstItem="hsL-np-i1K" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="7PF-Pv-lkm"/>
                             <constraint firstItem="hlw-r3-FEa" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="CKS-am-ER1"/>
-                            <constraint firstItem="hsL-np-i1K" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="Hz2-UP-Ust"/>
+                            <constraint firstItem="hsL-np-i1K" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="Hz2-UP-Ust"/>
                             <constraint firstItem="R4e-Ld-jFk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Kja-T6-Sv0"/>
                             <constraint firstItem="hlw-r3-FEa" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="QPh-sj-pL0"/>
                             <constraint firstItem="R4e-Ld-jFk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="V4H-Wg-2Hk"/>
                             <constraint firstItem="hlw-r3-FEa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="VCV-tz-XsS"/>
+                            <constraint firstItem="2AB-af-KBi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Vrf-C5-aEj"/>
+                            <constraint firstItem="pHo-SB-Cub" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Xvt-N8-SPa"/>
+                            <constraint firstAttribute="trailing" secondItem="pHo-SB-Cub" secondAttribute="trailing" id="Z2u-AO-ULG"/>
                             <constraint firstItem="R4e-Ld-jFk" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="aWn-yf-rEr"/>
                             <constraint firstItem="hsL-np-i1K" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="cm5-dw-uhd"/>
-                            <constraint firstItem="hsL-np-i1K" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="d3U-23-5Ig"/>
+                            <constraint firstItem="hsL-np-i1K" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="d3U-23-5Ig"/>
                             <constraint firstItem="hlw-r3-FEa" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="mUE-vd-3HW"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="centerY" secondItem="R4e-Ld-jFk" secondAttribute="bottom" id="tVc-2x-gD9"/>
+                            <constraint firstItem="yLp-4g-Mqq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="n2u-Gp-xIM"/>
+                            <constraint firstItem="pHo-SB-Cub" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="sQZ-Ct-cUh"/>
+                            <constraint firstAttribute="centerY" secondItem="R4e-Ld-jFk" secondAttribute="bottom" id="tVc-2x-gD9"/>
+                            <constraint firstItem="yLp-4g-Mqq" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="v85-jv-TPS"/>
+                            <constraint firstItem="2AB-af-KBi" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="wkb-LI-E5K"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="wcw-iD-6mb" id="UPq-2F-Vff"/>
+                        <outlet property="activityViewHeight" destination="XKk-pg-q0G" id="wfJ-2y-NRY"/>
+                        <outlet property="activityViewWidth" destination="QaR-WE-bcf" id="GeB-82-HQe"/>
+                        <outlet property="banner" destination="yLp-4g-Mqq" id="lN0-U8-3ar"/>
+                        <outlet property="bannerHeight" destination="3b7-u2-Rtt" id="Q6Z-HD-IX1"/>
                         <outlet property="bottomButton" destination="hsL-np-i1K" id="E6u-Bn-0ol"/>
+                        <outlet property="progressView" destination="pHo-SB-Cub" id="wvA-Os-tCC"/>
                         <outlet property="topButton" destination="R4e-Ld-jFk" id="BMD-6g-xRH"/>
                     </connections>
                 </viewController>

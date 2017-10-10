@@ -8,18 +8,29 @@
 
 import UIKit
 import AVFoundation
+import EvernoteSDK
 
-class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
+class ViewController: UIViewController {
     
-    // MARK: - Properties
+    // TODO: Preserve ViewController state when the app is closed
+    // (otherwise you're not able to get to a not-yet-deleted recording because the start screen is shown)
+    
     // Recording
     @IBOutlet weak var topButton: UIButton!
     @IBOutlet weak var bottomButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var banner: UIButton!
+    @IBOutlet weak var bannerHeight: NSLayoutConstraint!
+    @IBOutlet weak var activityViewWidth: NSLayoutConstraint!
+    @IBOutlet weak var activityViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var progressView: UIProgressView!
     var audioSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder?
     var audioPlayer: AVAudioPlayer?
     var isRecordingAllowed = false
-    lazy var audioURL = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+    lazy var audioURL = getDocumentsDirectory().appendingPathComponent("recording.m4a", isDirectory: false)
+    
+    var noteRef: ENNoteRef?
     
     // Images
     let settings =  #imageLiteral(resourceName: "Settings Button")
@@ -34,7 +45,6 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
     let evernote = #imageLiteral(resourceName: "Evernote Button")
     let dropbox = #imageLiteral(resourceName: "Dropbox Button")
     
-    // MARK: - Preparation on launch
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,65 +53,11 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
         prepareProximityMonitoring()
     }
     
-    private func prepareAudioSession() {
-        audioSession = AVAudioSession.sharedInstance()
-        
-        do {
-            try audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord, with: [.defaultToSpeaker, .allowAirPlay, .allowBluetooth, .allowBluetoothA2DP])
-            try audioSession?.setActive(true)
-            audioSession?.requestRecordPermission() { [unowned self] allowed in
-                if allowed {
-                    self.isRecordingAllowed = true
-                } else {
-                    self.alert(title: "Microphone Access Denied", message: "Seems like you denied microphone permission. To allow microphone access, go to Settings > Privacy > Microphone.")
-                }
-            }
-        } catch {
-            self.alert(title: "Recording failed", message: "Try restarting the app or contact RecFlow support.")
-        }
-    }
-    
-    private func prepareAudioRecorder() {
-        let settings = [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 12000,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
-        
-        do {
-            audioRecorder = try AVAudioRecorder(url: audioURL, settings: settings)
-            audioRecorder?.delegate = self
-        } catch {
-            finishRecording(success: false)
-        }
-    }
-    
-    private func prepareProximityMonitoring() {
-        let device = UIDevice.current
-        device.isProximityMonitoringEnabled = true
-        if device.isProximityMonitoringEnabled {
-            NotificationCenter.default.addObserver(self, selector: #selector(handleProximityChange), name: NSNotification.Name.UIDeviceProximityStateDidChange, object: nil)
-        }
-    }
-    
-    @objc private func handleProximityChange(notification: Notification) {
-        // Switch speakers
-        if UIDevice.current.proximityState {
-            // Receiver
-            try? audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord)
-        } else {
-            // Speaker
-            try? audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord, with: .defaultToSpeaker)
-        }
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: - Button Pressed
     @IBAction func buttonPressed(_ sender: UIButton) {
         guard let currentImage = sender.image(for: .normal) else {
             print("Button can't be identified. Image missing.")
@@ -120,44 +76,74 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
                 audioRecorder?.record()
                 topButton.setImage(self.pauseRecording, for: .normal)
                 bottomButton.setImage(self.stopRecording, for: .normal)
+                UIDevice.current.isProximityMonitoringEnabled = true
             } else {
                 self.alert(title: "Microphone Access Denied", message: "Seems like you denied microphone permission. You can allow microphone access under Settings > Privacy > Microphone.")
             }
         case pauseRecording:
             audioRecorder?.pause()
+            UIDevice.current.isProximityMonitoringEnabled = false
             topButton.setImage(unpauseRecording, for: .normal)
         case unpauseRecording:
             audioRecorder?.record()
+            UIDevice.current.isProximityMonitoringEnabled = true
             topButton.setImage(pauseRecording, for: .normal)
         case stopRecording:
             finishRecording(success: true)
+            UIDevice.current.isProximityMonitoringEnabled = false
             topButton.setImage(delete, for: .normal)
-            bottomButton.setImage(play, for: .normal)
+            bottomButton.setImage(evernote, for: .normal)
             preparePlayback()
             
-        // Playback
-        case play:
-            audioPlayer?.play()
-            bottomButton.setImage(pausePlayback, for: .normal)
-        case pausePlayback:
-            audioPlayer?.pause()
-            bottomButton.setImage(unpausePlayback, for: .normal)
-        case unpausePlayback:
-            audioPlayer?.play()
-            bottomButton.setImage(pausePlayback, for: .normal)
+//        // Playback
+//        case play:
+//            audioPlayer?.play()
+//            UIDevice.current.isProximityMonitoringEnabled = true
+//            bottomButton.setImage(pausePlayback, for: .normal)
+//        case pausePlayback:
+//            audioPlayer?.pause()
+//            UIDevice.current.isProximityMonitoringEnabled = false
+//            bottomButton.setImage(unpausePlayback, for: .normal)
+//        case unpausePlayback:
+//            audioPlayer?.play()
+//            UIDevice.current.isProximityMonitoringEnabled = true
+//            bottomButton.setImage(pausePlayback, for: .normal)
             
         // Deletion
         case delete:
             audioPlayer?.stop()
-            audioRecorder?.deleteRecording()
+            UIDevice.current.isProximityMonitoringEnabled = false
+            // audioRecorder?.deleteRecording() // File gets overridden by prepareToRecord() anyway
+            audioRecorder?.prepareToRecord()
             topButton.setImage(settings, for: .normal)
             bottomButton.setImage(rec, for: .normal)
             
         // Export
         case evernote:
-            print("Evernote export not implemented yet.")
-            topButton.setImage(settings, for: .normal)
-            bottomButton.setImage(rec, for: .normal)
+            EvernoteIntegration.authenticate(with: self) { error in
+                if let error = error {
+                    self.alert(title: "Error", message: error.localizedDescription)
+                    return
+                }
+                self.showActivity()
+                do {
+                    try EvernoteIntegration.send(audioURL: self.audioURL) { (noteRef, error) in
+                        if let error = error { print(error.localizedDescription) }
+                        self.noteRef = noteRef
+                        self.showBanner(text: "Upload complete. Tap here to open in Evernote.")
+                        self.hideActivity()
+                        self.topButton.setImage(self.settings, for: .normal)
+                        self.bottomButton.setImage(self.rec, for: .normal)
+                    }
+                } catch EvernoteIntegrationError.audioFileToData {
+                    self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
+                } catch EvernoteIntegrationError.dataToResource {
+                    self.alert(title: "Export failed", message: "Audio file could not be attached to note.")
+                } catch {
+                    self.alert(title: "Unknown error", message: "Please try again.")
+                }
+            }
+
         case dropbox:
             print("Dropbox export not implemented yet.")
             topButton.setImage(settings, for: .normal)
@@ -169,51 +155,14 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDe
             break
         }
     }
-    
-    private func preparePlayback() {
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
-            audioPlayer?.delegate = self
-            audioPlayer?.prepareToPlay()
-        }
-        catch {
-            alert(title: "File could not be opened", message: "Please contact RecFlow support")
-            topButton.setImage(settings, for: .normal)
-            bottomButton.setImage(rec, for: .normal)
-        }
-    }
-    
-    private func finishRecording(success: Bool) {
-        audioRecorder?.stop()
-        
-        if success {
-            print("Recording finished successfully")
-        } else {
-            alert(title: "Recording failed", message: "Please contact RecFlow support")
-            topButton.setImage(settings, for: .normal)
-            bottomButton.setImage(rec, for: .normal)
-        }
-    }
-    
-    // MARK: - AVAudioPlayerDelegate
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        bottomButton.setImage(play, for: .normal)
-    }
 }
-
+    
 // MARK: - General Helpers
 extension ViewController {
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
         return documentsDirectory
-    }
-    
-    func alert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let defaultAction = UIAlertAction(title: "Close", style: .default, handler: nil)
-        alertController.addAction(defaultAction)
-        self.present(alertController, animated: true, completion: nil)
     }
 }
 
