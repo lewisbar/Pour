@@ -9,7 +9,7 @@
 import AVFoundation
 import UIKit
 
-extension ViewController {
+extension ViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate  {
     
     func prepareAudioSession() {
         audioSession = AVAudioSession.sharedInstance()

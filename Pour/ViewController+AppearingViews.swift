@@ -18,30 +18,27 @@ extension ViewController {
     }
     
     func showBanner(text: String) {
-        let showDuration = 2.5
+        let duration = 3.0
         banner.titleLabel?.adjustsFontSizeToFitWidth = true
         banner.setTitle(text, for: .normal)
         banner.backgroundColor = .darkGray
         banner.alpha = 1
         
-        // Animate banner expansion
-        UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
-            self.bannerHeight.constant = 64 // TODO: Don't hardcode
-            self.view.layoutIfNeeded()
-            self.banner.backgroundColor = .black
-        }, completion: { finished in
-            // Tappable phase
-            UIView.animate(withDuration: 0.01, delay: showDuration, options: .allowUserInteraction, animations: {
+        UIView.animateKeyframes(withDuration: duration, delay: 0, options: .allowUserInteraction, animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.015) {
+                self.bannerHeight.constant = 64 // TODO: Don't hardcode
+                self.view.layoutIfNeeded()
+                self.banner.backgroundColor = .black
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.98, relativeDuration: 0.01) {
                 self.banner.backgroundColor = .darkGray
-            }, completion: { finished in
-                // Animate disappearing banner
-                UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
-                    self.bannerHeight.constant = 0
-                    self.view.layoutIfNeeded()
-                }, completion: { finished in
-                    self.banner.alpha = 0
-                })
-            })
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.99, relativeDuration: 0.01) {
+                self.bannerHeight.constant = 0
+                self.view.layoutIfNeeded()
+            }
+        }, completion: { (finished) in
+            self.banner.alpha = 0
         })
     }
     

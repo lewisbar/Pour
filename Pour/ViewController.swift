@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import EvernoteSDK
 
-class ViewController: UIViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
+class ViewController: UIViewController {
     
     // TODO: Preserve ViewController state when the app is closed
     // (otherwise you're not able to get to a not-yet-deleted recording because the start screen is shown)
