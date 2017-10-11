@@ -57,14 +57,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func pause() {
         // Pause recording or playback
         if let vc = window?.rootViewController as? ViewController {
-            if let isRecording = vc.audio.recorder?.isRecording,
-                isRecording {
+            if vc.state == .recording {
                 vc.audio.pauseRecording()
                 vc.state = .recordingPaused
-            } /*else if let isPlaying = vc.audio.player?.isPlaying,
-             isPlaying {
-             vc.audio.pausePlayback()
-             vc.state = .playbackPaused
+            } /*else if vc.state == .playing {
+                 vc.audio.pausePlayback()
+                 vc.state = .playbackPaused
              }*/
         }
     }
