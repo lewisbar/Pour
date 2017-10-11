@@ -15,6 +15,32 @@ class ViewController: UIViewController {
     // TODO: Preserve ViewController state when the app is closed
     // (otherwise you're not able to get to a not-yet-deleted recording because the start screen is shown)
     
+    enum State {
+        case readyToRecord
+        case recording
+        case recordingPaused
+        case recordingStopped
+    }
+    
+    var state: State = .readyToRecord {
+        didSet {
+            switch state {
+            case .readyToRecord:
+                topButton.setImage(settings, for: .normal)
+                bottomButton.setImage(rec, for: .normal)
+            case .recording:
+                topButton.setImage(pauseRecording, for: .normal)
+                bottomButton.setImage(stopRecording, for: .normal)
+            case .recordingPaused:
+                topButton.setImage(unpauseRecording, for: .normal)
+                bottomButton.setImage(stopRecording, for: .normal)
+            case .recordingStopped:
+                topButton.setImage(delete, for: .normal)
+                bottomButton.setImage(evernote, for: .normal)
+            }
+        }
+    }
+    
     // Recording
     @IBOutlet weak var topButton: UIButton!
     @IBOutlet weak var bottomButton: UIButton!
@@ -75,27 +101,25 @@ class ViewController: UIViewController {
         case rec:
             do {
                 try audio.record()
-                topButton.setImage(self.pauseRecording, for: .normal)
-                bottomButton.setImage(self.stopRecording, for: .normal)
+                state = .recording
             } catch {
                 alert(title: "Error", message: error.localizedDescription)
             }
 
         case pauseRecording:
             audio.pauseRecording()
-            topButton.setImage(unpauseRecording, for: .normal)
+            state = .recordingPaused
         case unpauseRecording:
             audio.unpauseRecording()
-            topButton.setImage(pauseRecording, for: .normal)
+            state = .recording
         case stopRecording:
             audio.stopRecording()
-            do {
-                try audio.preparePlayback()
-            } catch {
-                alert(title: "Error", message: error.localizedDescription)
-            }
-            topButton.setImage(delete, for: .normal)
-            bottomButton.setImage(evernote, for: .normal)
+//            do {
+//                try audio.preparePlayback()
+//            } catch {
+//                alert(title: "Error", message: error.localizedDescription)
+//            }
+            state = .recordingStopped
             
 //        // Playback
 //        case play:
@@ -112,8 +136,7 @@ class ViewController: UIViewController {
         case delete:
             audio.stopPlayback()
             audio.deleteRecording()
-            topButton.setImage(settings, for: .normal)
-            bottomButton.setImage(rec, for: .normal)
+            state = .readyToRecord
             
         // Export
         case evernote:
@@ -133,8 +156,7 @@ class ViewController: UIViewController {
                         self.noteRef = noteRef
                         self.showBanner(text: "Upload complete. Tap here to open in Evernote.")
                         self.hideActivity()
-                        self.topButton.setImage(self.settings, for: .normal)
-                        self.bottomButton.setImage(self.rec, for: .normal)
+                        self.state = .readyToRecord
                     }
                 } catch EvernoteIntegrationError.audioFileToData {
                     self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
@@ -147,8 +169,7 @@ class ViewController: UIViewController {
 
         case dropbox:
             print("Dropbox export not implemented yet.")
-            topButton.setImage(settings, for: .normal)
-            bottomButton.setImage(rec, for: .normal)
+            state = .readyToRecord
             
         // Default
         default:
