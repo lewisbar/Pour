@@ -23,7 +23,7 @@ enum AudioError: Error, LocalizedError {
     }
 }
 
-class Audio/*: AVAudioRecorderDelegate, AVAudioPlayerDelegate*/  {
+class Audio/*: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate*/  {
     
     var session: AVAudioSession?
     var recorder: AVAudioRecorder?
