@@ -151,6 +151,7 @@ class ViewController: UIViewController {
                         self.alert(title: "Error", message: "Recording not found")
                         return
                     }
+                    let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Upload to Evernote", expirationHandler: {/*TODO: Set to state recordingStopped, hide banner and activiyView*/})
                     try EvernoteIntegration.send(audioURL: audioURL) { (noteRef, error) in
                         if let error = error { print(error.localizedDescription) }
                         self.noteRef = noteRef
@@ -158,6 +159,7 @@ class ViewController: UIViewController {
                         self.showBanner(text: "Upload complete. Tap here to open\(preposition) Evernote.")
                         self.hideActivity()
                         self.state = .readyToRecord
+                        UIApplication.shared.endBackgroundTask(backgroundTaskID)
                     }
                 } catch EvernoteIntegrationError.audioFileToData {
                     self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
