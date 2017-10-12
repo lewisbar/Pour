@@ -37,7 +37,27 @@ struct EvernoteIntegration {
         
         note.title = title
         note.add(resource)
+        
         ENSession.shared.upload(note, notebook: nil, completion: completion)
+    }
+    
+    static func openInEvernote(_ noteRef: ENNoteRef) {
+        let service = "sandbox.evernote.com"
+        guard let shardID = ENSession.shared.user?.shardId else {
+            print("No user logged in")
+            return
+        }
+        let userID = ENSession.shared.userID
+        guard let noteGuid = noteRef.guid else {
+            print("No noteGuid")
+            return
+        }
+        guard let url = URL(string: "https://\(service)/shard/\(shardID)/nl/\(userID)/\(noteGuid)/") else {
+            print("URL scheme not valid")
+            return
+        }
+        
+        UIApplication.shared.openURL(url)
     }
 }
 
