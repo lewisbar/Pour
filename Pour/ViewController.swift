@@ -154,7 +154,8 @@ class ViewController: UIViewController {
                     try EvernoteIntegration.send(audioURL: audioURL) { (noteRef, error) in
                         if let error = error { print(error.localizedDescription) }
                         self.noteRef = noteRef
-                        self.showBanner(text: "Upload complete. Tap here to open in Evernote.")
+                        let preposition = EvernoteIntegration.evernoteHasFixedViewInEvernoteFunctionality ? " in" : ""
+                        self.showBanner(text: "Upload complete. Tap here to open\(preposition) Evernote.")
                         self.hideActivity()
                         self.state = .readyToRecord
                     }
