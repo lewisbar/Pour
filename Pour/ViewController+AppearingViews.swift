@@ -13,7 +13,7 @@ extension ViewController {
     
     @IBAction func bannerTouched(_ sender: UIButton) {
         if let noteRef = noteRef {
-            ENSession.shared.viewNoteInEvernote(noteRef)
+            EvernoteIntegration.openInEvernote(noteRef)
         }
     }
     

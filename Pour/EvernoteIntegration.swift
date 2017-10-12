@@ -16,6 +16,8 @@ enum EvernoteIntegrationError: Error {
 
 struct EvernoteIntegration {
     
+    static let evernoteHasFixedViewInEvernoteFunctionality = false
+    
     static func authenticate(with viewController: UIViewController, completion: @escaping ENSessionAuthenticateCompletionHandler) {
         if !ENSession.shared.isAuthenticated {
             ENSession.shared.authenticate(with: viewController, preferRegistration: false, completion: completion)
@@ -37,7 +39,39 @@ struct EvernoteIntegration {
         
         note.title = title
         note.add(resource)
+        
         ENSession.shared.upload(note, notebook: nil, completion: completion)
+    }
+    
+    static func openInEvernote(_ noteRef: ENNoteRef) {
+        // Try to open Evernote app
+        let evernoteURL = URL(string: "en://")!
+        if UIApplication.shared.canOpenURL(evernoteURL) {
+            if evernoteHasFixedViewInEvernoteFunctionality {
+                ENSession.shared.viewNoteInEvernote(noteRef)
+            } else {
+                UIApplication.shared.openURL(evernoteURL)
+            }
+            return
+        }
+        
+        // Open note in browser
+        let service = "sandbox.evernote.com"
+        guard let shardID = ENSession.shared.user?.shardId else {
+            print("No user logged in")
+            return
+        }
+        let userID = ENSession.shared.userID
+        guard let noteGuid = noteRef.guid else {
+            print("No noteGuid")
+            return
+        }
+        guard let url = URL(string: "https://\(service)/shard/\(shardID)/nl/\(userID)/\(noteGuid)/") else {
+            print("URL scheme not valid")
+            return
+        }
+        
+        UIApplication.shared.openURL(url)
     }
 }
 
