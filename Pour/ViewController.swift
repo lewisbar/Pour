@@ -151,7 +151,10 @@ class ViewController: UIViewController {
                         self.alert(title: "Error", message: "Recording not found")
                         return
                     }
-                    let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Upload to Evernote", expirationHandler: {/*TODO: Set to state recordingStopped, hide banner and activiyView*/})
+                    let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Upload to Evernote", expirationHandler: {
+                        self.state = .recordingStopped
+                        self.hideActivity()
+                    })
                     try EvernoteIntegration.send(audioURL: audioURL) { (noteRef, error) in
                         if let error = error { print(error.localizedDescription) }
                         self.noteRef = noteRef
