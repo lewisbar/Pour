@@ -41,7 +41,6 @@ class ViewController: UIViewController {
         }
     }
     
-    // Recording
     @IBOutlet weak var topButton: UIButton!
     @IBOutlet weak var bottomButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
