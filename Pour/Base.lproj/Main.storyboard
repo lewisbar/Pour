@@ -22,20 +22,40 @@
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="hlw-r3-FEa">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R4e-Ld-jFk">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UZ9-YL-mOf" userLabel="Bottom Background">
+                                <rect key="frame" x="0.0" y="333" width="375" height="333.5"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hsL-np-i1K">
+                                        <rect key="frame" x="76" y="55" width="222" height="222"/>
+                                        <state key="normal" image="Rec Button"/>
+                                        <connections>
+                                            <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VKb-dV-jMl"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="hsL-np-i1K" firstAttribute="centerY" secondItem="UZ9-YL-mOf" secondAttribute="centerY" id="UTf-Nd-FiQ"/>
+                                    <constraint firstItem="hsL-np-i1K" firstAttribute="centerX" secondItem="UZ9-YL-mOf" secondAttribute="centerX" id="fyw-9w-ULc"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FFI-3M-69R" userLabel="Top Background">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="333.5"/>
-                                <state key="normal" image="Settings Button"/>
-                                <connections>
-                                    <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FV0-QF-KlG"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hsL-np-i1K">
-                                <rect key="frame" x="0.0" y="333.5" width="375" height="333.5"/>
-                                <state key="normal" image="Rec Button"/>
-                                <connections>
-                                    <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VKb-dV-jMl"/>
-                                </connections>
-                            </button>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ffs-UY-DEp">
+                                        <rect key="frame" x="76" y="55" width="222" height="222"/>
+                                        <state key="normal" image="Settings Button"/>
+                                        <connections>
+                                            <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xJu-Ra-wS9"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Ffs-UY-DEp" firstAttribute="centerX" secondItem="FFI-3M-69R" secondAttribute="centerX" id="1eQ-cD-Ywk"/>
+                                    <constraint firstItem="Ffs-UY-DEp" firstAttribute="centerY" secondItem="FFI-3M-69R" secondAttribute="centerY" id="zvZ-dS-z1L"/>
+                                </constraints>
+                            </view>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLp-4g-Mqq" userLabel="Banner">
                                 <rect key="frame" x="0.0" y="333.5" width="375" height="0.0"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -73,24 +93,24 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="UZ9-YL-mOf" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="1i7-E4-Pc7"/>
                             <constraint firstItem="yLp-4g-Mqq" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="76n-eW-ACQ"/>
-                            <constraint firstItem="hsL-np-i1K" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="7PF-Pv-lkm"/>
-                            <constraint firstItem="hlw-r3-FEa" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="CKS-am-ER1"/>
-                            <constraint firstItem="hsL-np-i1K" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="Hz2-UP-Ust"/>
-                            <constraint firstItem="R4e-Ld-jFk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Kja-T6-Sv0"/>
+                            <constraint firstItem="hlw-r3-FEa" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="CKS-am-ER1"/>
+                            <constraint firstAttribute="centerY" secondItem="FFI-3M-69R" secondAttribute="bottom" id="EFM-0h-i4u"/>
+                            <constraint firstAttribute="bottom" secondItem="UZ9-YL-mOf" secondAttribute="bottom" id="Jtq-ny-BBw"/>
                             <constraint firstItem="hlw-r3-FEa" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="QPh-sj-pL0"/>
-                            <constraint firstItem="R4e-Ld-jFk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="V4H-Wg-2Hk"/>
-                            <constraint firstItem="hlw-r3-FEa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="VCV-tz-XsS"/>
+                            <constraint firstItem="FFI-3M-69R" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="QjQ-tJ-V6p"/>
+                            <constraint firstItem="UZ9-YL-mOf" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="V1h-DF-7y3"/>
+                            <constraint firstItem="hlw-r3-FEa" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="VCV-tz-XsS"/>
                             <constraint firstItem="2AB-af-KBi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Vrf-C5-aEj"/>
                             <constraint firstItem="pHo-SB-Cub" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Xvt-N8-SPa"/>
                             <constraint firstAttribute="trailing" secondItem="pHo-SB-Cub" secondAttribute="trailing" id="Z2u-AO-ULG"/>
-                            <constraint firstItem="R4e-Ld-jFk" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="aWn-yf-rEr"/>
-                            <constraint firstItem="hsL-np-i1K" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="cm5-dw-uhd"/>
-                            <constraint firstItem="hsL-np-i1K" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="d3U-23-5Ig"/>
-                            <constraint firstItem="hlw-r3-FEa" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="mUE-vd-3HW"/>
+                            <constraint firstItem="UZ9-YL-mOf" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="cFz-EZ-EUW"/>
+                            <constraint firstItem="FFI-3M-69R" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="jHe-mr-9Jk"/>
+                            <constraint firstItem="FFI-3M-69R" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="kvX-wj-mVU"/>
+                            <constraint firstItem="hlw-r3-FEa" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="mUE-vd-3HW"/>
                             <constraint firstItem="yLp-4g-Mqq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="n2u-Gp-xIM"/>
                             <constraint firstItem="pHo-SB-Cub" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="sQZ-Ct-cUh"/>
-                            <constraint firstAttribute="centerY" secondItem="R4e-Ld-jFk" secondAttribute="bottom" id="tVc-2x-gD9"/>
                             <constraint firstItem="yLp-4g-Mqq" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="v85-jv-TPS"/>
                             <constraint firstItem="2AB-af-KBi" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="wkb-LI-E5K"/>
                         </constraints>
@@ -104,7 +124,7 @@
                         <outlet property="bannerHeight" destination="3b7-u2-Rtt" id="Q6Z-HD-IX1"/>
                         <outlet property="bottomButton" destination="hsL-np-i1K" id="E6u-Bn-0ol"/>
                         <outlet property="progressView" destination="pHo-SB-Cub" id="wvA-Os-tCC"/>
-                        <outlet property="topButton" destination="R4e-Ld-jFk" id="BMD-6g-xRH"/>
+                        <outlet property="topButton" destination="Ffs-UY-DEp" id="v3V-82-A4R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -114,7 +134,7 @@
     </scenes>
     <resources>
         <image name="Line" width="414" height="2"/>
-        <image name="Rec Button" width="220" height="220"/>
-        <image name="Settings Button" width="220" height="220"/>
+        <image name="Rec Button" width="222" height="222"/>
+        <image name="Settings Button" width="222" height="222"/>
     </resources>
 </document>

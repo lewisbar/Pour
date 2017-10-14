@@ -41,7 +41,6 @@ class ViewController: UIViewController {
         }
     }
     
-    // Recording
     @IBOutlet weak var topButton: UIButton!
     @IBOutlet weak var bottomButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -55,7 +54,7 @@ class ViewController: UIViewController {
     var noteRef: ENNoteRef?
     
     // Images
-    let settings =  #imageLiteral(resourceName: "Settings Button")
+    let settings = #imageLiteral(resourceName: "Settings Button")
     let rec = #imageLiteral(resourceName: "Rec Button")
     let stopRecording = #imageLiteral(resourceName: "Stop Button")
     let pauseRecording = #imageLiteral(resourceName: "Pause Recording Button")
