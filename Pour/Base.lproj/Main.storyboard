@@ -26,7 +26,7 @@
                                 <rect key="frame" x="0.0" y="333" width="375" height="333.5"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hsL-np-i1K">
-                                        <rect key="frame" x="77" y="56" width="220" height="220"/>
+                                        <rect key="frame" x="76" y="55" width="222" height="222"/>
                                         <state key="normal" image="Rec Button"/>
                                         <connections>
                                             <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VKb-dV-jMl"/>
@@ -43,7 +43,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="333.5"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ffs-UY-DEp">
-                                        <rect key="frame" x="77" y="56" width="220" height="220"/>
+                                        <rect key="frame" x="76" y="55" width="222" height="222"/>
                                         <state key="normal" image="Settings Button"/>
                                         <connections>
                                             <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xJu-Ra-wS9"/>
@@ -134,7 +134,7 @@
     </scenes>
     <resources>
         <image name="Line" width="414" height="2"/>
-        <image name="Rec Button" width="220" height="220"/>
-        <image name="Settings Button" width="220" height="220"/>
+        <image name="Rec Button" width="222" height="222"/>
+        <image name="Settings Button" width="222" height="222"/>
     </resources>
 </document>
