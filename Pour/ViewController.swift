@@ -71,8 +71,7 @@ class ViewController: UIViewController {
         
         do {
             try audio.prepareAudioSession()
-            try audio.prepareAudioRecorder(url: getDocumentsDirectory().appendingPathComponent("recording.m4a", isDirectory: false)
-)
+            try audio.prepareAudioRecorder(url: getDocumentsDirectory().appendingPathComponent("recording.m4a", isDirectory: false))
             audio.prepareProximityMonitoring()
         } catch {
             alert(title: "Error", message: error.localizedDescription)
