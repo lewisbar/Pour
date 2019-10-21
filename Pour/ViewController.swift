@@ -93,7 +93,8 @@ class ViewController: UIViewController {
             
         // Settings
         case settings:
-            print("Settings screen not implemented yet")
+            // print("Settings screen not implemented yet")
+            performSegue(withIdentifier: "toSettings", sender: self)
             
         // Recording
         case rec:
