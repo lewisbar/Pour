@@ -50,7 +50,7 @@ struct EvernoteIntegration {
             if evernoteHasFixedViewInEvernoteFunctionality {
                 ENSession.shared.viewNoteInEvernote(noteRef)
             } else {
-                UIApplication.shared.openURL(evernoteURL)
+                UIApplication.shared.open(evernoteURL)
             }
             return
         }
@@ -71,7 +71,7 @@ struct EvernoteIntegration {
             return
         }
         
-        UIApplication.shared.openURL(url)
+        UIApplication.shared.open(url)
     }
 }
 
