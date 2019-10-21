@@ -32,10 +32,7 @@ class Audio/*: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate*/  {
     var isRecordingAllowed = false
     
     func prepareAudioSession() throws {
-        var options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetooth]
-        if #available(iOS 10.0, *) {
-            options.insert([.allowAirPlay, .allowBluetoothA2DP])
-        }
+        let options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetooth, .allowAirPlay, .allowBluetoothA2DP]
         
         session = AVAudioSession.sharedInstance()
         try session?.setCategory(.playAndRecord, mode: .default, options: options)
