@@ -32,13 +32,13 @@ class Audio/*: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate*/  {
     var isRecordingAllowed = false
     
     func prepareAudioSession() throws {
-        var options: AVAudioSessionCategoryOptions = [.defaultToSpeaker, .allowBluetooth]
+        var options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetooth]
         if #available(iOS 10.0, *) {
             options.insert([.allowAirPlay, .allowBluetoothA2DP])
         }
         
         session = AVAudioSession.sharedInstance()
-        try session?.setCategory(AVAudioSessionCategoryPlayAndRecord, with: options)
+        try session?.setCategory(.playAndRecord, mode: .default, options: options)
         try session?.setActive(true)
         session?.requestRecordPermission() { [unowned self] allowed in
             self.isRecordingAllowed = allowed
@@ -70,7 +70,7 @@ class Audio/*: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate*/  {
         let device = UIDevice.current
         device.isProximityMonitoringEnabled = true
         if device.isProximityMonitoringEnabled {
-            NotificationCenter.default.addObserver(self, selector: #selector(handleProximityChange), name: NSNotification.Name.UIDeviceProximityStateDidChange, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(handleProximityChange), name: UIDevice.proximityStateDidChangeNotification, object: nil)
         }
         device.isProximityMonitoringEnabled = false
     }
@@ -79,10 +79,10 @@ class Audio/*: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate*/  {
         // Switch speakers
         if UIDevice.current.proximityState {
             // Receiver
-            try? session?.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try? session?.setCategory(.playAndRecord, mode: .default)
         } else {
             // Speaker
-            try? session?.setCategory(AVAudioSessionCategoryPlayAndRecord, with: .defaultToSpeaker)
+            try? session?.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
         }
     }
     
