@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainVC.swift
 //  Pour
 //
 //  Created by Lennart Wisbar on 28.09.17.
@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import EvernoteSDK
 
-class ViewController: UIViewController {
+class MainVC: UIViewController {
     
     // TODO: Preserve ViewController state when the app is closed
     // (otherwise you're not able to get to a not-yet-deleted recording because the start screen is shown)
@@ -185,7 +185,7 @@ class ViewController: UIViewController {
 }
     
 // MARK: - General Helpers
-extension ViewController {
+extension MainVC {
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]

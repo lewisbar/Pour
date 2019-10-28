@@ -18,8 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         ENSession.setSharedSessionConsumerKey(Keys.Evernote.key, consumerSecret: Keys.Evernote.secret, optionalHost: ENSessionHostSandbox)
         
-        // Override point for customization after application launch.
-        // TODO: Restore state
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = MainVC()
+        window?.makeKeyAndVisible()
 
         return true
     }
@@ -56,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func pause() {
         // Pause recording or playback
-        if let vc = window?.rootViewController as? ViewController {
+        if let vc = window?.rootViewController as? MainVC {
             if vc.state == .recording {
                 vc.audio.pauseRecording()
                 vc.state = .recordingPaused

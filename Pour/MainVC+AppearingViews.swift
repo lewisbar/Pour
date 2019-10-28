@@ -1,5 +1,5 @@
 //
-//  ViewController+AppearingViews.swift
+//  MainVC+AppearingViews.swift
 //  Pour
 //
 //  Created by Lennart Wisbar on 09.10.17.
@@ -9,7 +9,7 @@
 import UIKit
 import EvernoteSDK
 
-extension ViewController {
+extension MainVC {
     
     @IBAction func bannerTouched(_ sender: UIButton) {
         if let noteRef = noteRef {
