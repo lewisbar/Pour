@@ -85,6 +85,8 @@ class MainVC: UIViewController {
         background.addSubview(topBackground)
         background.addSubview(bottomBackground)
         view.addSubview(background)
+        let line = UIImageView(image: #imageLiteral(resourceName: "Line"))
+        view.addSubview(line)
         
         // Layout
         background.translatesAutoresizingMaskIntoConstraints = false
@@ -92,6 +94,7 @@ class MainVC: UIViewController {
         bottomBackground.translatesAutoresizingMaskIntoConstraints = false
         topButton.translatesAutoresizingMaskIntoConstraints = false
         bottomButton.translatesAutoresizingMaskIntoConstraints = false
+        line.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             background.topAnchor.constraint(equalTo: view.safeTopAnchor),
             background.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -108,7 +111,10 @@ class MainVC: UIViewController {
             topButton.centerXAnchor.constraint(equalTo: topBackground.centerXAnchor),
             topButton.centerYAnchor.constraint(equalTo: topBackground.centerYAnchor),
             bottomButton.centerXAnchor.constraint(equalTo: bottomBackground.centerXAnchor),
-            bottomButton.centerYAnchor.constraint(equalTo: bottomBackground.centerYAnchor)
+            bottomButton.centerYAnchor.constraint(equalTo: bottomBackground.centerYAnchor),
+            line.centerYAnchor.constraint(equalTo: background.centerYAnchor),
+            line.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            line.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
         do {
