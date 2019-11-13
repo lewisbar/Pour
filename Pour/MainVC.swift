@@ -48,7 +48,6 @@ class MainVC: UIViewController {
     var activityViewHeight: NSLayoutConstraint!
     @IBOutlet weak var banner: UIButton!
     @IBOutlet weak var bannerHeight: NSLayoutConstraint!
-    @IBOutlet weak var progressView: UIProgressView!
     let audio = Audio()
     
     var noteRef: ENNoteRef?
