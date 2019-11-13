@@ -41,8 +41,8 @@ class MainVC: UIViewController {
         }
     }
     
-    @IBOutlet weak var topButton: UIButton!
-    @IBOutlet weak var bottomButton: UIButton!
+    let topButton = UIButton(type: .custom)
+    let bottomButton = UIButton(type: .custom)
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var banner: UIButton!
     @IBOutlet weak var bannerHeight: NSLayoutConstraint!
@@ -68,6 +68,48 @@ class MainVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        topButton.setImage(settings, for: .normal)
+        bottomButton.setImage(rec, for: .normal)
+        
+        // Set up view hierarchy
+        let background = UIView()
+        let topBackground = UIView()
+        let bottomBackground = UIView()
+        background.backgroundColor = .white
+        topBackground.backgroundColor = .white
+        bottomBackground.backgroundColor = .white
+        view.backgroundColor = .white
+        topBackground.addSubview(topButton)
+        bottomBackground.addSubview(bottomButton)
+        background.addSubview(topBackground)
+        background.addSubview(bottomBackground)
+        view.addSubview(background)
+        
+        // Layout
+        background.translatesAutoresizingMaskIntoConstraints = false
+        topBackground.translatesAutoresizingMaskIntoConstraints = false
+        bottomBackground.translatesAutoresizingMaskIntoConstraints = false
+        topButton.translatesAutoresizingMaskIntoConstraints = false
+        bottomButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            background.topAnchor.constraint(equalTo: view.safeTopAnchor),
+            background.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            background.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            background.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topBackground.leadingAnchor.constraint(equalTo: background.leadingAnchor),
+            topBackground.trailingAnchor.constraint(equalTo: background.trailingAnchor),
+            topBackground.topAnchor.constraint(equalTo: background.topAnchor),
+            topBackground.bottomAnchor.constraint(equalTo: background.centerYAnchor),
+            bottomBackground.leadingAnchor.constraint(equalTo: background.leadingAnchor),
+            bottomBackground.trailingAnchor.constraint(equalTo: background.trailingAnchor),
+            bottomBackground.topAnchor.constraint(equalTo: background.centerYAnchor),
+            bottomBackground.bottomAnchor.constraint(equalTo: background.bottomAnchor),
+            topButton.centerXAnchor.constraint(equalTo: topBackground.centerXAnchor),
+            topButton.centerYAnchor.constraint(equalTo: topBackground.centerYAnchor),
+            bottomButton.centerXAnchor.constraint(equalTo: bottomBackground.centerXAnchor),
+            bottomButton.centerYAnchor.constraint(equalTo: bottomBackground.centerYAnchor)
+        ])
         
         do {
             try audio.prepareAudioSession()
