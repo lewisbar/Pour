@@ -43,11 +43,11 @@ class MainVC: UIViewController {
     
     let topButton = UIButton(type: .custom)
     let bottomButton = UIButton(type: .custom)
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    let activityIndicator = UIActivityIndicatorView(style: .gray)
+    var activityViewWidth: NSLayoutConstraint!
+    var activityViewHeight: NSLayoutConstraint!
     @IBOutlet weak var banner: UIButton!
     @IBOutlet weak var bannerHeight: NSLayoutConstraint!
-    @IBOutlet weak var activityViewWidth: NSLayoutConstraint!
-    @IBOutlet weak var activityViewHeight: NSLayoutConstraint!
     @IBOutlet weak var progressView: UIProgressView!
     let audio = Audio()
     
@@ -87,6 +87,9 @@ class MainVC: UIViewController {
         view.addSubview(background)
         let line = UIImageView(image: #imageLiteral(resourceName: "Line"))
         view.addSubview(line)
+        let activityView = UIView()
+        activityView.addSubview(activityIndicator)
+        view.addSubview(activityView)
         
         // Layout
         background.translatesAutoresizingMaskIntoConstraints = false
@@ -95,6 +98,10 @@ class MainVC: UIViewController {
         topButton.translatesAutoresizingMaskIntoConstraints = false
         bottomButton.translatesAutoresizingMaskIntoConstraints = false
         line.translatesAutoresizingMaskIntoConstraints = false
+        activityView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityViewWidth = activityView.widthAnchor.constraint(equalToConstant: 0)
+        activityViewHeight = activityView.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             background.topAnchor.constraint(equalTo: view.safeTopAnchor),
             background.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -113,8 +120,14 @@ class MainVC: UIViewController {
             bottomButton.centerXAnchor.constraint(equalTo: bottomBackground.centerXAnchor),
             bottomButton.centerYAnchor.constraint(equalTo: bottomBackground.centerYAnchor),
             line.centerYAnchor.constraint(equalTo: background.centerYAnchor),
-            line.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            line.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            line.leadingAnchor.constraint(equalTo: background.leadingAnchor),
+            line.trailingAnchor.constraint(equalTo: background.trailingAnchor),
+            activityView.centerXAnchor.constraint(equalTo: background.centerXAnchor),
+            activityView.centerYAnchor.constraint(equalTo: background.centerYAnchor),
+            activityViewWidth,
+            activityViewHeight,
+            activityIndicator.centerXAnchor.constraint(equalTo: activityView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: activityView.centerYAnchor),
         ])
         
         do {
@@ -193,15 +206,16 @@ class MainVC: UIViewController {
                     return
                 }
                 self.showActivity()
+                
+                guard let audioURL = self.audio.url else {
+                    self.alert(title: "Error", message: "Recording not found")
+                    return
+                }
+                let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Upload to Evernote", expirationHandler: {
+                    self.state = .recordingStopped
+                    self.hideActivity()
+                })
                 do {
-                    guard let audioURL = self.audio.url else {
-                        self.alert(title: "Error", message: "Recording not found")
-                        return
-                    }
-                    let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Upload to Evernote", expirationHandler: {
-                        self.state = .recordingStopped
-                        self.hideActivity()
-                    })
                     try EvernoteIntegration.send(audioURL: audioURL) { (noteRef, error) in
                         if let error = error { print(error.localizedDescription) }
                         self.noteRef = noteRef
@@ -209,7 +223,6 @@ class MainVC: UIViewController {
                         self.showBanner(text: "Upload complete. Tap here to open\(preposition) Evernote.")
                         self.hideActivity()
                         self.state = .readyToRecord
-                        UIApplication.shared.endBackgroundTask(backgroundTaskID)
                     }
                 } catch EvernoteIntegrationError.audioFileToData {
                     self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
@@ -218,6 +231,7 @@ class MainVC: UIViewController {
                 } catch {
                     self.alert(title: "Unknown error", message: "Please try again.")
                 }
+                UIApplication.shared.endBackgroundTask(backgroundTaskID)
             }
 
         case dropbox:

@@ -65,6 +65,7 @@ extension MainVC {
         self.activityIndicator.stopAnimating()
         self.activityViewWidth.constant = 0
         self.activityViewHeight.constant = 0
+        // TODO: Is it correct that this is not in an animation block?
     }
     
     func alert(title: String, message: String) {
