@@ -46,8 +46,8 @@ class MainVC: UIViewController {
     let activityIndicator = UIActivityIndicatorView(style: .gray)
     var activityViewWidth: NSLayoutConstraint!
     var activityViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var banner: UIButton!
-    @IBOutlet weak var bannerHeight: NSLayoutConstraint!
+    let banner = UIButton(type: .custom)
+    var bannerHeight: NSLayoutConstraint!
     let audio = Audio()
     
     var noteRef: ENNoteRef?
@@ -72,6 +72,8 @@ class MainVC: UIViewController {
         bottomButton.setImage(rec, for: .normal)
         topButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         bottomButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        banner.backgroundColor = .black
+        banner.titleLabel?.textColor = .white
         
         // Set up view hierarchy
         let background = UIView()
@@ -92,6 +94,7 @@ class MainVC: UIViewController {
         activityView.backgroundColor = .white
         activityView.addSubview(activityIndicator)
         view.addSubview(activityView)
+        view.addSubview(banner)
         
         // Layout
         background.translatesAutoresizingMaskIntoConstraints = false
@@ -102,8 +105,10 @@ class MainVC: UIViewController {
         line.translatesAutoresizingMaskIntoConstraints = false
         activityView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        banner.translatesAutoresizingMaskIntoConstraints = false
         activityViewWidth = activityView.widthAnchor.constraint(equalToConstant: 0)
         activityViewHeight = activityView.heightAnchor.constraint(equalToConstant: 0)
+        bannerHeight = banner.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             background.topAnchor.constraint(equalTo: view.safeTopAnchor),
             background.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -130,6 +135,10 @@ class MainVC: UIViewController {
             activityViewHeight,
             activityIndicator.centerXAnchor.constraint(equalTo: activityView.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: activityView.centerYAnchor),
+            banner.centerYAnchor.constraint(equalTo: background.centerYAnchor),
+            banner.leadingAnchor.constraint(equalTo: background.leadingAnchor),
+            banner.trailingAnchor.constraint(equalTo: background.trailingAnchor),
+            bannerHeight,
         ])
         
         do {
