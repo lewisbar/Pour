@@ -74,6 +74,7 @@ class MainVC: UIViewController {
         bottomButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         banner.backgroundColor = .black
         banner.titleLabel?.textColor = .white
+        banner.addTarget(self, action: #selector(bannerTouched(_:)), for: .touchUpInside)
         
         // Set up view hierarchy
         let background = UIView()

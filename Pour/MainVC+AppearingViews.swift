@@ -11,7 +11,7 @@ import EvernoteSDK
 
 extension MainVC {
     
-    @IBAction func bannerTouched(_ sender: UIButton) {
+    @objc func bannerTouched(_ sender: UIButton) {
         if let noteRef = noteRef {
             EvernoteIntegration.openInEvernote(noteRef)
         }
