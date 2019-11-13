@@ -84,7 +84,7 @@ class Audio/*: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate*/  {
         } else {
             // Speaker
             do {
-                try session?.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
+                try session?.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
             } catch {
                 print(error.localizedDescription)
             }
