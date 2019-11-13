@@ -71,6 +71,8 @@ class MainVC: UIViewController {
         
         topButton.setImage(settings, for: .normal)
         bottomButton.setImage(rec, for: .normal)
+        topButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        bottomButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         
         // Set up view hierarchy
         let background = UIView()
@@ -144,7 +146,7 @@ class MainVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func buttonPressed(_ sender: UIButton) {
+    @objc func buttonPressed(_ sender: UIButton) {
         guard let currentImage = sender.image(for: .normal) else {
             print("Button can't be identified. Image missing.")
             return
