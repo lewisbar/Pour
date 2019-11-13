@@ -76,10 +76,18 @@ class Audio/*: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate*/  {
         // Switch speakers
         if UIDevice.current.proximityState {
             // Receiver
-            try? session?.setCategory(.playAndRecord, mode: .default)
+            do {
+                try session?.setCategory(.playAndRecord, mode: .default)
+            } catch {
+                print(error.localizedDescription)
+            }
         } else {
             // Speaker
-            try? session?.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
+            do {
+                try session?.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
