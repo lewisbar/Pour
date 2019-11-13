@@ -90,6 +90,7 @@ class MainVC: UIViewController {
         let line = UIImageView(image: #imageLiteral(resourceName: "Line"))
         view.addSubview(line)
         let activityView = UIView()
+        activityView.backgroundColor = .white
         activityView.addSubview(activityIndicator)
         view.addSubview(activityView)
         
