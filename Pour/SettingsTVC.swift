@@ -1,5 +1,5 @@
 //
-//  SettingsTableVC.swift
+//  SettingsTVC.swift
 //  Pour
 //
 //  Created by Lennart Wisbar on 21.10.19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsTableVC: UITableViewController {
+class SettingsTVC: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

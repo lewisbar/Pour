@@ -167,7 +167,8 @@ class MainVC: UIViewController {
         // Settings
         case settings:
             print("Settings screen not implemented yet")
-            // performSegue(withIdentifier: "toSettings", sender: self)
+            let notebooksTVC = NotebooksTVC()
+            present(notebooksTVC, animated: true)  // Just to test the NotebooksTVC. Later, SettingsTVC should be presented at this point, which should in turn push NotebooksTVC
             
         // Recording
         case rec:
