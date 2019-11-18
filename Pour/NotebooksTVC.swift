@@ -17,6 +17,8 @@ class NotebooksTVC: UITableViewController {
         super.viewDidLoad()
         
         tableView.register(NotebookCell.self, forCellReuseIdentifier: "Notebook Cell")
+        
+        // TODO: Don't do this here, but in the VC that presents this one (SettingsTVC). Present this VC when the list has been fetched.
         ENSession.shared.listWritableNotebooks { (notebooks, error) in
             if let error = error {
                 print(error.localizedDescription)
@@ -39,13 +41,11 @@ class NotebooksTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(notebooks?.count)
         return notebooks?.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Notebook Cell", for: indexPath)
-        print("yup")
         cell.textLabel?.text = notebooks?[indexPath.row].name
 
         return cell

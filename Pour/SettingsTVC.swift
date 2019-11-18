@@ -13,6 +13,7 @@ class SettingsTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Settings Cell")
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -36,7 +37,7 @@ class SettingsTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Settings Cell", for: indexPath)
 
         switch indexPath.row {
         case 0:
