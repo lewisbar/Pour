@@ -18,15 +18,6 @@ class NotebooksTVC: UITableViewController {
         
         tableView.register(NotebookCell.self, forCellReuseIdentifier: "Notebook Cell")
         
-        // TODO: Don't do this here, but in the VC that presents this one (SettingsTVC). Present this VC when the list has been fetched.
-        ENSession.shared.listWritableNotebooks { (notebooks, error) in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            self.notebooks = notebooks
-            self.tableView.reloadData()
-        }
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 

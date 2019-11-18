@@ -7,22 +7,45 @@
 //
 
 import UIKit
+import EvernoteSDK
 
 class SettingsTVC: UITableViewController {
-
+    
+    var username: String?
+    var notebooks: [ENNotebook]?
+    var defaultNotebook: ENNotebook?
+    var defaultPourNotebook: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Settings Cell")
+        
+        EvernoteIntegration.authenticate(with: self) { error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            self.username = ENSession.shared.userDisplayName
+            ENSession.shared.listWritableNotebooks { (notebooks, error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+                self.notebooks = notebooks
+                
+                self.defaultNotebook = notebooks?.first(where: { $0.isDefaultNotebook })
+                
+                self.tableView.reloadData()
+            }
+        }
+        
+        tableView.register(SettingsCell.self, forCellReuseIdentifier: "Settings Cell")
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-    }
-    
-    @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
-        self.dismiss(animated: true)
     }
     
 
@@ -42,10 +65,10 @@ class SettingsTVC: UITableViewController {
         switch indexPath.row {
         case 0:
             cell.textLabel?.text = "Account"
-            cell.detailTextLabel?.text = ""
+            cell.detailTextLabel?.text = self.username
         case 1:
             cell.textLabel?.text = "Notebook"
-            cell.detailTextLabel?.text = "Default"
+            cell.detailTextLabel?.text = self.defaultNotebook?.name ?? ""
         case 2:
             cell.textLabel?.text = "Tags"
             cell.detailTextLabel?.text = ""
@@ -57,7 +80,7 @@ class SettingsTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Settings"
+        return "Evernote Account Settings"
     }
 
     /*
