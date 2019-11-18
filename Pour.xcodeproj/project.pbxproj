@@ -17,6 +17,7 @@
 		30E8E4731F8BA2FA000AEA37 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E8E4721F8BA2FA000AEA37 /* Audio.swift */; };
 		30E8E4751F8C1B5C000AEA37 /* EvernoteIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E8E4741F8C1B5C000AEA37 /* EvernoteIntegration.swift */; };
 		7C5DA2852382DCD400B82B2D /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5DA2842382DCD400B82B2D /* SettingsCell.swift */; };
+		7C5DA287238333E700B82B2D /* LinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5DA286238333E700B82B2D /* LinkButton.swift */; };
 		7C77017C237B94F50094E68F /* UIView+SafeArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C77017B237B94F50094E68F /* UIView+SafeArea.swift */; };
 		7C9DDB36237D76E80024E180 /* NotebooksTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9DDB35237D76E80024E180 /* NotebooksTVC.swift */; };
 		7C9DDB38237D7D0F0024E180 /* NotebookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9DDB37237D7D0F0024E180 /* NotebookCell.swift */; };
@@ -37,6 +38,7 @@
 		30E8E4721F8BA2FA000AEA37 /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		30E8E4741F8C1B5C000AEA37 /* EvernoteIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvernoteIntegration.swift; sourceTree = "<group>"; };
 		7C5DA2842382DCD400B82B2D /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		7C5DA286238333E700B82B2D /* LinkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButton.swift; sourceTree = "<group>"; };
 		7C77017B237B94F50094E68F /* UIView+SafeArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+SafeArea.swift"; sourceTree = "<group>"; };
 		7C9DDB35237D76E80024E180 /* NotebooksTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksTVC.swift; sourceTree = "<group>"; };
 		7C9DDB37237D7D0F0024E180 /* NotebookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookCell.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 			children = (
 				30E441631F7D3F8F00FC8463 /* AppDelegate.swift */,
 				30E441651F7D3F8F00FC8463 /* MainVC.swift */,
+				7C5DA286238333E700B82B2D /* LinkButton.swift */,
 				30E8E4701F8BA092000AEA37 /* MainVC+AppearingViews.swift */,
 				309D95EA235DB644002E2C34 /* SettingsTVC.swift */,
 				7C5DA2842382DCD400B82B2D /* SettingsCell.swift */,
@@ -250,6 +253,7 @@
 				309D95EB235DB644002E2C34 /* SettingsTVC.swift in Sources */,
 				30C9A00D1F820A1D00A256D4 /* Keys.swift in Sources */,
 				7C9DDB36237D76E80024E180 /* NotebooksTVC.swift in Sources */,
+				7C5DA287238333E700B82B2D /* LinkButton.swift in Sources */,
 				30E441641F7D3F8F00FC8463 /* AppDelegate.swift in Sources */,
 				7C5DA2852382DCD400B82B2D /* SettingsCell.swift in Sources */,
 			);
