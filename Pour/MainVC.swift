@@ -166,9 +166,11 @@ class MainVC: UIViewController {
             
         // Settings
         case settings:
-            print("Settings screen not implemented yet")
-            let notebooksTVC = NotebooksTVC()
-            present(notebooksTVC, animated: true)  // Just to test the NotebooksTVC. Later, SettingsTVC should be presented at this point, which should in turn push NotebooksTVC
+            let settingsVC = SettingsTVC()
+            let nav = UINavigationController(rootViewController: settingsVC)
+            let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismisss))
+            settingsVC.navigationItem.rightBarButtonItem = doneButton
+            present(nav, animated: true)
             
         // Recording
         case rec:
@@ -265,6 +267,9 @@ extension MainVC {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
         return documentsDirectory
+    }
+    @objc func dismisss() {
+        dismiss(animated: true)
     }
 }
 
