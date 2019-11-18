@@ -16,6 +16,22 @@ class SettingsTVC: UITableViewController {
     var defaultNotebook: ENNotebook?
     var defaultPourNotebook: String?
     
+    init() {
+        let style: UITableView.Style
+        if #available(iOS 13.0, *) {
+            style = .insetGrouped
+        } else {
+            // Fallback on earlier versions
+            style = .grouped
+        }
+        super.init(style: style)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

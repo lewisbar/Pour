@@ -166,14 +166,7 @@ class MainVC: UIViewController {
             
         // Settings
         case settings:
-            let style: UITableView.Style
-            if #available(iOS 13.0, *) {
-                style = .insetGrouped
-            } else {
-                // Fallback on earlier versions
-                style = .grouped
-            }
-            let settingsVC = SettingsTVC(style: style)
+            let settingsVC = SettingsTVC()
             let nav = UINavigationController(rootViewController: settingsVC)
             let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismisss))
             settingsVC.navigationItem.rightBarButtonItem = doneButton
