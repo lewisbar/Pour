@@ -73,18 +73,6 @@ struct EvernoteIntegration {
         
         UIApplication.shared.open(url)
     }
-    
-    static func notebooks() -> [ENNotebook]? {
-        var books: [ENNotebook]?
-        ENSession.shared.listWritableNotebooks { (notebooks, error) in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            books = notebooks
-        }
-        return books
-    }
 }
 
 extension EvernoteIntegration {
