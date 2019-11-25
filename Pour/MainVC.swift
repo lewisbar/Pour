@@ -170,6 +170,9 @@ class MainVC: UIViewController {
             let nav = UINavigationController(rootViewController: settingsVC)
             let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismisss))
             settingsVC.navigationItem.rightBarButtonItem = doneButton
+            nav.transitioningDelegate = self
+            nav.modalPresentationStyle = .custom
+            nav.modalPresentationCapturesStatusBarAppearance = true
             present(nav, animated: true)
             
         // Recording
