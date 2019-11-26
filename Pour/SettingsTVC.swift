@@ -34,6 +34,12 @@ class SettingsTVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.backgroundColor = .black
+        tableView.separatorColor = .clear
+        let doneButton = UIBarButtonItem(title: "\u{2715}", style: .plain, target: self, action: #selector(close))
+        navigationItem.rightBarButtonItem = doneButton
+        // title = "Settings"
+        tableView.alwaysBounceVertical = false
         
         EvernoteIntegration.authenticate(with: self) { error in
             if let error = error {
@@ -58,6 +64,27 @@ class SettingsTVC: UITableViewController {
         tableView.register(SettingsCell.self, forCellReuseIdentifier: "Settings Cell")
     }
     
+    @objc func close() {
+        dismiss(animated: true)
+    }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        navigationController?.navigationBar.isHidden = true
+//    }
+//
+//    override func viewDidDisappear(_ animated: Bool) {
+//        navigationController?.navigationBar.isHidden = false
+//    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        // Only works this way without a UINavigationController
+//        return .lightContent
+//    }
+    
 
     // MARK: - Table view data source
 
@@ -71,10 +98,13 @@ class SettingsTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Settings Cell", for: indexPath)
-
+        cell.backgroundColor = .black
+        cell.textLabel?.textColor = .white
+        cell.detailTextLabel?.textColor = .lightGray
+        
         switch indexPath.row {
         case 0:
-            cell.textLabel?.text = "Account"
+            cell.textLabel?.text = "Evernote Account"
             cell.detailTextLabel?.text = self.username
         case 1:
             cell.textLabel?.text = "Notebook"
@@ -89,8 +119,23 @@ class SettingsTVC: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Evernote Account Settings"
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return "Settings"
+//    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 48))
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: container.frame.width, height: 28))
+        titleLabel.text = "Settings"
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        titleLabel.textAlignment = .center
+        // titleLabel.layoutMargins = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
+        container.addSubview(titleLabel)
+        return container
     }
-
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
 }

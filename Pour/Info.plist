@@ -55,5 +55,7 @@
 	<array>
 		<string>en</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
 </dict>
 </plist>

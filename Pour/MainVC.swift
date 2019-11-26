@@ -167,9 +167,15 @@ class MainVC: UIViewController {
         // Settings
         case settings:
             let settingsVC = SettingsTVC()
+//            settingsVC.transitioningDelegate = self
+//            settingsVC.modalPresentationStyle = .custom
+//            settingsVC.modalPresentationCapturesStatusBarAppearance = true
+//            present(settingsVC, animated: true)
             let nav = UINavigationController(rootViewController: settingsVC)
-            let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismisss))
-            settingsVC.navigationItem.rightBarButtonItem = doneButton
+            nav.navigationBar.barTintColor = .black
+            nav.navigationBar.tintColor = .white
+            nav.navigationBar.isTranslucent = false
+            nav.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .semibold), NSAttributedString.Key.foregroundColor: UIColor.white]
             nav.transitioningDelegate = self
             nav.modalPresentationStyle = .custom
             nav.modalPresentationCapturesStatusBarAppearance = true
@@ -270,9 +276,6 @@ extension MainVC {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
         return documentsDirectory
-    }
-    @objc func dismisss() {
-        dismiss(animated: true)
     }
 }
 
