@@ -15,19 +15,29 @@ class DownTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard
-            let toViewController = transitionContext.viewController(forKey: .to),
-            let fromViewController = transitionContext.viewController(forKey: .from)
+            let toVC = transitionContext.viewController(forKey: .to),
+            let fromVC = transitionContext.viewController(forKey: .from),
+            let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: true)
         else {
             return
         }
-        transitionContext.containerView.addSubview(toViewController.view)
-        toViewController.view.frame = CGRect(x: 0, y: -toViewController.view.frame.height / 2, width: toViewController.view.frame.width, height: toViewController.view.frame.height / 2)
+        print(fromVC.view.frame)
+        transitionContext.containerView.addSubview(toVC.view)
+        transitionContext.containerView.addSubview(fromSnapshot)
+        let toVCHeight = toVC.view.frame.height / 2
+        toVC.view.frame = CGRect(x: 0, y: -toVC.view.frame.height / 2, width: toVC.view.frame.width, height: toVCHeight)
+        
+        // fromSnapshot?.frame = fromVC.view.frame
         
         let duration = self.transitionDuration(using: transitionContext)
         UIView.animate(withDuration: duration, animations: {
-            toViewController.view.frame.origin.y = 0
-            fromViewController.view.frame.origin.y = toViewController.view.frame.height
+            print(fromVC.view.frame)
+            toVC.view.frame.origin.y = 0
+            fromSnapshot.frame.origin.y = toVCHeight
+            print(fromVC.view.frame)
         }, completion: { _ in
+            fromVC.view.frame = fromSnapshot.frame
+            fromSnapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         })
     }

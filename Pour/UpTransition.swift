@@ -15,16 +15,16 @@ class UpTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard
-            let fromViewController = transitionContext.viewController(forKey: .from),
-            let toViewController = transitionContext.viewController(forKey: .to)
+            let fromVC = transitionContext.viewController(forKey: .from),
+            let toVC = transitionContext.viewController(forKey: .to)
         else {
             return
         }
 
         let duration = self.transitionDuration(using: transitionContext)
         UIView.animate(withDuration: duration, animations: {
-            fromViewController.view.frame.origin.y = -fromViewController.view.frame.height
-            toViewController.view.frame = UIScreen.main.bounds
+            fromVC.view.frame.origin.y = -fromVC.view.frame.height
+            toVC.view.frame = UIScreen.main.bounds
         }, completion: { _ in
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         })

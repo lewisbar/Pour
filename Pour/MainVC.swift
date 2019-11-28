@@ -110,8 +110,18 @@ class MainVC: UIViewController {
         activityViewWidth = activityView.widthAnchor.constraint(equalToConstant: 0)
         activityViewHeight = activityView.heightAnchor.constraint(equalToConstant: 0)
         bannerHeight = banner.heightAnchor.constraint(equalToConstant: 0)
+        
+        // During the transition to SettingsVC, the status bar disappears, seemingly setting the safe area top inset to zero, which made the view jump up a bit. Therefore, I can't simply use view.safeAreaLayoutGuide.topAnchor. The solution I found is to get the safeAreaLayoutGuide constant and use that constant directly, so it doesn't change when the safe area changes.
+        let safeAreaTopInset: CGFloat
+        if #available(iOS 11.0, *) {
+            safeAreaTopInset = max(UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0, 20)
+        } else {
+            // Fallback on earlier versions
+            safeAreaTopInset = 20
+        }
+
         NSLayoutConstraint.activate([
-            background.topAnchor.constraint(equalTo: view.safeTopAnchor),
+            background.topAnchor.constraint(equalTo: view.topAnchor, constant: safeAreaTopInset),
             background.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             background.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             background.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -167,10 +177,6 @@ class MainVC: UIViewController {
         // Settings
         case settings:
             let settingsVC = SettingsTVC()
-//            settingsVC.transitioningDelegate = self
-//            settingsVC.modalPresentationStyle = .custom
-//            settingsVC.modalPresentationCapturesStatusBarAppearance = true
-//            present(settingsVC, animated: true)
             let nav = UINavigationController(rootViewController: settingsVC)
             nav.navigationBar.barTintColor = .black
             nav.navigationBar.tintColor = .white

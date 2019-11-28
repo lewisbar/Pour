@@ -71,7 +71,7 @@ class SettingsTVC: UITableViewController {
 //    override func viewDidAppear(_ animated: Bool) {
 //        navigationController?.navigationBar.isHidden = true
 //    }
-//
+
 //    override func viewDidDisappear(_ animated: Bool) {
 //        navigationController?.navigationBar.isHidden = false
 //    }
