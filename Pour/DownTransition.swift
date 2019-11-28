@@ -21,7 +21,6 @@ class DownTransition: NSObject, UIViewControllerAnimatedTransitioning {
         else {
             return
         }
-        print(fromVC.view.frame)
         transitionContext.containerView.addSubview(toVC.view)
         transitionContext.containerView.addSubview(fromSnapshot)
         let toVCHeight = toVC.view.frame.height / 2
@@ -31,10 +30,8 @@ class DownTransition: NSObject, UIViewControllerAnimatedTransitioning {
         
         let duration = self.transitionDuration(using: transitionContext)
         UIView.animate(withDuration: duration, animations: {
-            print(fromVC.view.frame)
             toVC.view.frame.origin.y = 0
             fromSnapshot.frame.origin.y = toVCHeight
-            print(fromVC.view.frame)
         }, completion: { _ in
             fromVC.view.frame = fromSnapshot.frame
             fromSnapshot.removeFromSuperview()
