@@ -23,21 +23,17 @@ class DownTransition: NSObject, UIViewControllerAnimatedTransitioning {
         }
         transitionContext.containerView.addSubview(toVC.view)
         transitionContext.containerView.addSubview(fromSnapshot)
-        let toVCHeight = toVC.view.frame.height / 2
+        let toVCHeight = toVC.view.frame.height
         toVC.view.frame = CGRect(x: 0, y: -toVC.view.frame.height / 2, width: toVC.view.frame.width, height: toVCHeight)
-        
-        // fromSnapshot?.frame = fromVC.view.frame
         
         let duration = self.transitionDuration(using: transitionContext)
         UIView.animate(withDuration: duration, animations: {
             toVC.view.frame.origin.y = 0
-            fromSnapshot.frame.origin.y = toVCHeight
+            fromSnapshot.frame.origin.y = toVCHeight / 2
         }, completion: { _ in
             fromVC.view.frame = fromSnapshot.frame
             fromSnapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         })
     }
-    
-    
 }

@@ -15,6 +15,14 @@ class SettingsTVC: UITableViewController {
     var notebooks: [ENNotebook]?
     var defaultNotebook: ENNotebook?
     var defaultPourNotebook: String?
+//    var statusBarHidden = true {
+//        didSet(newValue) {
+//            setNeedsStatusBarAppearanceUpdate()
+//        }
+//    }
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     init() {
         let style: UITableView.Style
@@ -34,6 +42,8 @@ class SettingsTVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let f = tableView.frame
+        tableView.frame = CGRect(x: f.origin.x, y: f.origin.y, width: f.width, height: f.height / 2)
         tableView.backgroundColor = .black
         tableView.separatorColor = .clear
         let doneButton = UIBarButtonItem(title: "\u{2715}", style: .plain, target: self, action: #selector(close))
@@ -62,27 +72,24 @@ class SettingsTVC: UITableViewController {
         }
         
         tableView.register(SettingsCell.self, forCellReuseIdentifier: "Settings Cell")
+        
+        let screen = UIScreen.main.bounds
+        let dismissButton = UIButton(frame: CGRect(x: 0, y: screen.height / 2, width: screen.width, height: screen.height / 2))
+        dismissButton.addTarget(self, action: #selector(close), for: .touchUpInside)
+        view.addSubview(dismissButton)
     }
     
     @objc func close() {
         dismiss(animated: true)
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        navigationController?.navigationBar.isHidden = true
-//    }
+    override func viewDidAppear(_ animated: Bool) {
+        view.backgroundColor = .clear
+    }
 
 //    override func viewDidDisappear(_ animated: Bool) {
-//        navigationController?.navigationBar.isHidden = false
-//    }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        // Only works this way without a UINavigationController
-//        return .lightContent
+//        // navigationController?.navigationBar.isHidden = false
+//        statusBarHidden = false
 //    }
     
 

@@ -50,6 +50,15 @@ class MainVC: UIViewController {
     var bannerHeight: NSLayoutConstraint!
     let audio = Audio()
     
+//    var statusBarHidden = true {
+//        didSet(newValue) {
+//            setNeedsStatusBarAppearanceUpdate()
+//        }
+//    }
+//    override var prefersStatusBarHidden: Bool {
+//        return false
+//    }
+    
     var noteRef: ENNoteRef?
     
     // Images
