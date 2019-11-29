@@ -15,11 +15,7 @@ class SettingsTVC: UITableViewController {
     var notebooks: [ENNotebook]?
     var defaultNotebook: ENNotebook?
     var defaultPourNotebook: String?
-//    var statusBarHidden = true {
-//        didSet(newValue) {
-//            setNeedsStatusBarAppearanceUpdate()
-//        }
-//    }
+
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -48,7 +44,6 @@ class SettingsTVC: UITableViewController {
         tableView.separatorColor = .clear
         let doneButton = UIBarButtonItem(title: "\u{2715}", style: .plain, target: self, action: #selector(close))
         navigationItem.rightBarButtonItem = doneButton
-        // title = "Settings"
         tableView.alwaysBounceVertical = false
         
         EvernoteIntegration.authenticate(with: self) { error in
@@ -84,15 +79,11 @@ class SettingsTVC: UITableViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         view.backgroundColor = .clear
     }
 
-//    override func viewDidDisappear(_ animated: Bool) {
-//        // navigationController?.navigationBar.isHidden = false
-//        statusBarHidden = false
-//    }
     
-
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -126,10 +117,6 @@ class SettingsTVC: UITableViewController {
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return "Settings"
-//    }
-    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 48))
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: container.frame.width, height: 28))
@@ -137,7 +124,6 @@ class SettingsTVC: UITableViewController {
         titleLabel.textColor = .white
         titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
         titleLabel.textAlignment = .center
-        // titleLabel.layoutMargins = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
         container.addSubview(titleLabel)
         return container
     }

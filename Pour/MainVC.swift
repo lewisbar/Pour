@@ -50,14 +50,10 @@ class MainVC: UIViewController {
     var bannerHeight: NSLayoutConstraint!
     let audio = Audio()
     
-//    var statusBarHidden = true {
-//        didSet(newValue) {
-//            setNeedsStatusBarAppearanceUpdate()
-//        }
-//    }
-//    override var prefersStatusBarHidden: Bool {
-//        return false
-//    }
+    override var prefersStatusBarHidden: Bool {
+        // This somehow fixes the status bar pushing the settings view down just before the dismiss transition. It was intended to not let it appear until the main view is far enough down, but what actually happens is that it still appears at the start of the transition, but doesn't affect the settings view's position. That's fine.
+        return (view.frame.origin.y > UIScreen.main.bounds.height / 3)
+    }
     
     var noteRef: ENNoteRef?
     

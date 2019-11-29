@@ -10,36 +10,27 @@ import UIKit
 
 class UpTransition: NSObject, UIViewControllerAnimatedTransitioning {
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 2
+        return 0.3
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard
             let fromVC = transitionContext.viewController(forKey: .from),
-            let toVC = transitionContext.viewController(forKey: .to)
-//            let nav = toVC as? UINavigationController,
-//            let settingsVC = nav.viewControllers.first,
-//            let fromSnapshot = settingsVC.view.snapshotView(afterScreenUpdates: false)
+            let toVC = transitionContext.viewController(forKey: .to),
+            let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: true)
         else {
             return
         }
-        // transitionContext.containerView.addSubview(toVC.view)
-        // fromVC.view.frame.origin.y = -fromVC.view.frame.height / 2
 
-        // fromSnapshot.frame = fromVC.view.frame
-        // transitionContext.containerView.addSubview(toVC.view)
-
-        // mainVC.statusBarHidden = true
+        transitionContext.containerView.addSubview(fromSnapshot)
+        fromVC.view.removeFromSuperview()
         
         let duration = self.transitionDuration(using: transitionContext)
         UIView.animate(withDuration: duration, animations: {
             toVC.view.frame = UIScreen.main.bounds
-            fromVC.view.frame.origin.y = -fromVC.view.frame.height / 2
-            // mainVC.statusBarHidden = false
+            fromSnapshot.frame.origin.y = -fromSnapshot.frame.height / 2
         }, completion: { _ in
-            // fromVC.view.frame.origin.y = -fromVC.view.frame.height / 2
-            // fromVC.view.frame = fromSnapshot.frame
-            // fromSnapshot.removeFromSuperview()
+            fromSnapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         })
     }
