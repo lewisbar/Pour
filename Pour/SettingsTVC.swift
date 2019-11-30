@@ -42,8 +42,6 @@ class SettingsTVC: UITableViewController {
         let f = tableView.frame
         let newHeight = f.height / 2 + mainVCSafeAreaTopInset
         tableView.frame = CGRect(x: f.origin.x, y: f.origin.y, width: f.width, height: newHeight)
-        print(tableView.frame)
-        print(view.frame)
         tableView.backgroundColor = .black
         tableView.separatorColor = .clear
         let doneButton = UIBarButtonItem(title: "\u{2715}", style: .plain, target: self, action: #selector(close))
