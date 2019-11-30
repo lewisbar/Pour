@@ -10,30 +10,33 @@ import UIKit
 
 class DownTransition: NSObject, UIViewControllerAnimatedTransitioning {
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.5
+        return 0.3
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard
             let toVC = transitionContext.viewController(forKey: .to),
             let fromVC = transitionContext.viewController(forKey: .from),
-            let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: true)
+            let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: true),
+            let mainVC = fromVC as? MainVC,
+            let mainVCTopInset = mainVC.safeAreaTopInset
         else {
             return
         }
         transitionContext.containerView.addSubview(toVC.view)
         transitionContext.containerView.addSubview(fromSnapshot)
         let toVCHeight = toVC.view.frame.height
-        toVC.view.frame = CGRect(x: 0, y: -toVC.view.frame.height / 2, width: toVC.view.frame.width, height: toVCHeight)
+        toVC.view.frame = CGRect(x: 0, y: -((toVC.view.frame.height / 2) + mainVCTopInset), width: toVC.view.frame.width, height: toVCHeight)
         
         let duration = self.transitionDuration(using: transitionContext)
         UIView.animate(withDuration: duration, animations: {
             toVC.view.frame.origin.y = 0
-            fromSnapshot.frame.origin.y = toVCHeight / 2
+            fromSnapshot.frame.origin.y = (toVCHeight / 2) - (mainVCTopInset / 2)
         }, completion: { _ in
             fromVC.view.frame = fromSnapshot.frame
             fromSnapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            UIApplication.shared.keyWindow?.backgroundColor = .clear
         })
     }
 }

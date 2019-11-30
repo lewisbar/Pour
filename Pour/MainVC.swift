@@ -49,6 +49,7 @@ class MainVC: UIViewController {
     let banner = UIButton(type: .custom)
     var bannerHeight: NSLayoutConstraint!
     let audio = Audio()
+    var safeAreaTopInset: CGFloat!
     
     override var prefersStatusBarHidden: Bool {
         // This somehow fixes the status bar pushing the settings view down just before the dismiss transition. It was intended to not let it appear until the main view is far enough down, but what actually happens is that it still appears at the start of the transition, but doesn't affect the settings view's position. That's fine.
@@ -88,7 +89,8 @@ class MainVC: UIViewController {
         background.backgroundColor = .white
         topBackground.backgroundColor = .white
         bottomBackground.backgroundColor = .white
-        view.backgroundColor = .white
+        // view.backgroundColor = .white
+        view.backgroundColor = .clear
         topBackground.addSubview(topButton)
         bottomBackground.addSubview(bottomButton)
         background.addSubview(topBackground)
@@ -115,16 +117,15 @@ class MainVC: UIViewController {
         activityViewWidth = activityView.widthAnchor.constraint(equalToConstant: 0)
         activityViewHeight = activityView.heightAnchor.constraint(equalToConstant: 0)
         bannerHeight = banner.heightAnchor.constraint(equalToConstant: 0)
-        
+
         // During the transition to SettingsVC, the status bar disappears, seemingly setting the safe area top inset to zero, which made the view jump up a bit. Therefore, I can't simply use view.safeAreaLayoutGuide.topAnchor. The solution I found is to get the safeAreaLayoutGuide constant and use that constant directly, so it doesn't change when the safe area changes.
-        let safeAreaTopInset: CGFloat
         if #available(iOS 11.0, *) {
             safeAreaTopInset = max(UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0, 20)
         } else {
             // Fallback on earlier versions
             safeAreaTopInset = 20
         }
-
+        
         NSLayoutConstraint.activate([
             background.topAnchor.constraint(equalTo: view.topAnchor, constant: safeAreaTopInset),
             background.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -182,6 +183,7 @@ class MainVC: UIViewController {
         // Settings
         case settings:
             let settingsVC = SettingsTVC()
+            settingsVC.mainVCSafeAreaTopInset = safeAreaTopInset
             let nav = UINavigationController(rootViewController: settingsVC)
             nav.navigationBar.barTintColor = .black
             nav.navigationBar.tintColor = .white

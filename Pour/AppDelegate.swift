@@ -14,14 +14,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         ENSession.setSharedSessionConsumerKey(Keys.Evernote.key, consumerSecret: Keys.Evernote.secret, optionalHost: ENSessionHostSandbox)
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = MainVC()
+        window?.backgroundColor = .white
+        window?.makeKey()
+        let mainVC = MainVC()
+        window?.rootViewController = mainVC
         window?.makeKeyAndVisible()
-
+        
         return true
     }
 

@@ -10,7 +10,7 @@ import UIKit
 
 class UpTransition: NSObject, UIViewControllerAnimatedTransitioning {
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3
+        return 0.2
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -21,7 +21,6 @@ class UpTransition: NSObject, UIViewControllerAnimatedTransitioning {
         else {
             return
         }
-
         transitionContext.containerView.addSubview(fromSnapshot)
         fromVC.view.removeFromSuperview()
         
@@ -32,6 +31,7 @@ class UpTransition: NSObject, UIViewControllerAnimatedTransitioning {
         }, completion: { _ in
             fromSnapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            UIApplication.shared.keyWindow?.backgroundColor = .white
         })
     }
     
