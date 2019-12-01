@@ -182,6 +182,7 @@ class MainVC: UIViewController {
             
         // Settings
         case settings:
+            // TODO: Pre-load SettingsTVC? First appearance is a bit delayed right now.
             let settingsVC = SettingsTVC()
             settingsVC.mainVCSafeAreaTopInset = safeAreaTopInset
             let nav = UINavigationController(rootViewController: settingsVC)

@@ -50,7 +50,7 @@ class SettingsTVC: UITableViewController {
         tableView.register(SettingsCell.self, forCellReuseIdentifier: "Settings Cell")
         
         let screen = UIScreen.main.bounds
-        let dismissButton = UIButton(frame: CGRect(x: 0, y: screen.height / 2, width: screen.width, height: screen.height / 2))
+        let dismissButton = UIButton(frame: CGRect(x: 0, y: screen.height / 2.5, width: screen.width, height: screen.height / 1.5))  // TODO: Why these numbers?
         dismissButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         view.addSubview(dismissButton)
                 
