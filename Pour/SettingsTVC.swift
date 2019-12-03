@@ -39,9 +39,10 @@ class SettingsTVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let f = tableView.frame
-        let newHeight = f.height / 2 + mainVCSafeAreaTopInset
-        tableView.frame = CGRect(x: f.origin.x, y: f.origin.y, width: f.width, height: newHeight)
+        // let f = tableView.frame
+        // let oldTVHeight = f.height
+        // let newTVHeight = oldTVHeight / 2 - mainVCSafeAreaTopInset
+        // tableView.frame = CGRect(x: f.origin.x, y: f.origin.y, width: f.width, height: newTVHeight)
         tableView.backgroundColor = .black
         tableView.separatorColor = .clear
         let doneButton = UIBarButtonItem(title: "\u{2715}", style: .plain, target: self, action: #selector(close))
@@ -50,9 +51,17 @@ class SettingsTVC: UITableViewController {
         tableView.register(SettingsCell.self, forCellReuseIdentifier: "Settings Cell")
         
         let screen = UIScreen.main.bounds
-        let dismissButton = UIButton(frame: CGRect(x: 0, y: screen.height / 2.5, width: screen.width, height: screen.height / 1.5))  // TODO: Why these numbers?
+        let lowerTableViewEdge = (view.frame.height / 2) - (mainVCSafeAreaTopInset) - 14  // TODO: Why the 14?
+        let dismissButtonHeight = screen.height - lowerTableViewEdge
+        let dismissButton = UIButton(frame: CGRect(x: 0, y: lowerTableViewEdge, width: view.frame.width, height: dismissButtonHeight))  // TODO: Why these numbers?
         dismissButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         view.addSubview(dismissButton)
+        // dismissButton.backgroundColor = .green
+        
+        print("View Height: ", view.frame.height)
+        print("Table View Height: ", tableView.frame.height)
+        print("Lower Table View Edge: ", lowerTableViewEdge)
+        print("Button Height: ", dismissButton.frame.height)
                 
         EvernoteIntegration.authenticate(with: self) { error in
             if let error = error {
