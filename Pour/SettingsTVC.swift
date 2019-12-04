@@ -36,7 +36,6 @@ class SettingsTVC: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // let f = tableView.frame
@@ -62,25 +61,22 @@ class SettingsTVC: UITableViewController {
         print("Table View Height: ", tableView.frame.height)
         print("Lower Table View Edge: ", lowerTableViewEdge)
         print("Button Height: ", dismissButton.frame.height)
-                
-        EvernoteIntegration.authenticate(with: self) { error in
+        
+        if ENSession.shared.isAuthenticated {
+            loadAccountData()
+        }
+    }
+    
+    fileprivate func loadAccountData() {
+        self.username = ENSession.shared.userDisplayName
+        ENSession.shared.listWritableNotebooks { (notebooks, error) in
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
-            
-            self.username = ENSession.shared.userDisplayName
-            ENSession.shared.listWritableNotebooks { (notebooks, error) in
-                if let error = error {
-                    print(error.localizedDescription)
-                    return
-                }
-                self.notebooks = notebooks
-                
-                self.defaultNotebook = notebooks?.first(where: { $0.isDefaultNotebook })
-                
-                self.tableView.reloadData()
-            }
+            self.notebooks = notebooks
+            self.defaultNotebook = notebooks?.first(where: { $0.isDefaultNotebook })
+            self.tableView.reloadData()
         }
     }
     
@@ -101,14 +97,14 @@ class SettingsTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        if ENSession.shared.isAuthenticated {
+            return 3
+        }
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Settings Cell", for: indexPath)
-        cell.backgroundColor = .black
-        cell.textLabel?.textColor = .white
-        cell.detailTextLabel?.textColor = .lightGray
         
         switch indexPath.row {
         case 0:
@@ -128,7 +124,7 @@ class SettingsTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 48))
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 70))
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: container.frame.width, height: 28))
         titleLabel.text = "Settings"
         titleLabel.textColor = .white
@@ -139,6 +135,31 @@ class SettingsTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        return 50
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if ENSession.shared.isAuthenticated {
+            let button = UnlinkButton()
+            button.addTarget(self, action: #selector(unlinkEvernote), for: .touchUpInside)
+            return button
+        } else {
+            let button = LinkButton()
+            button.addTarget(self, action: #selector(linkEvernote), for: .touchUpInside)
+            return button
+        }
+    }
+    
+    @objc func linkEvernote() {
+        EvernoteIntegration.authenticate(with: self, completion: { _ in self.loadAccountData() })
+    }
+    
+    @objc func unlinkEvernote() {
+        ENSession.shared.unauthenticate()
+        tableView.reloadData()
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 50
     }
 }

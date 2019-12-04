@@ -14,6 +14,9 @@ class SettingsCell: UITableViewCell {
         super.init(style: .value1, reuseIdentifier: reuseIdentifier)
         self.selectedBackgroundView = UIView()
         self.selectedBackgroundView?.backgroundColor = .darkGray
+        self.backgroundColor = .black
+        self.textLabel?.textColor = .white
+        self.detailTextLabel?.textColor = .lightGray
     }
 
     required init?(coder aDecoder: NSCoder) {
