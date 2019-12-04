@@ -147,6 +147,7 @@ class SettingsTVC: UITableViewController {
         return cell
     }
     
+    // TODO: Use the tableView.tableHeaderView property instead of these two section related methods
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 70))
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: container.frame.width, height: 28))
