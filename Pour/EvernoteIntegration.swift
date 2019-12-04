@@ -56,7 +56,7 @@ struct EvernoteIntegration {
         }
         
         // Open note in browser
-        let service = "sandbox.evernote.com"
+        let service = Keys.Evernote.service
         guard let shardID = ENSession.shared.user?.shardId else {
             print("No user logged in")
             return

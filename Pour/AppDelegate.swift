@@ -15,7 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        ENSession.setSharedSessionConsumerKey(Keys.Evernote.key, consumerSecret: Keys.Evernote.secret, optionalHost: ENSessionHostSandbox)
+        
+        ENSession.setSharedSessionConsumerKey(Keys.Evernote.key, consumerSecret: Keys.Evernote.secret, optionalHost: nil)  // ENSessionHostSandbox)
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = .white
@@ -32,6 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         
         pause()
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        return ENSession.shared.handleOpenURL(url)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {

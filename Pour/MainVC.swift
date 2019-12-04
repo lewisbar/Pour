@@ -74,6 +74,8 @@ class MainVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // ENSession.shared.unauthenticate()
+        
         topButton.setImage(settings, for: .normal)
         bottomButton.setImage(rec, for: .normal)
         topButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
