@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        ENSession.setSharedSessionConsumerKey(Keys.Evernote.key, consumerSecret: Keys.Evernote.secret, optionalHost: nil)  // ENSessionHostSandbox)
+        ENSession.setSharedSessionConsumerKey(Keys.Evernote.key, consumerSecret: Keys.Evernote.secret, optionalHost: nil)  // optionalHost for sandbox: ENSessionHostSandbox
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = .white
@@ -35,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         pause()
     }
     
+    // This is needed to enable authentication by automatic switching to the Evernote app
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         return ENSession.shared.handleOpenURL(url)
     }
