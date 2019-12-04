@@ -49,22 +49,46 @@ class SettingsTVC: UITableViewController {
         tableView.alwaysBounceVertical = false
         tableView.register(SettingsCell.self, forCellReuseIdentifier: "Settings Cell")
         
+        updateFooterView(link: !ENSession.shared.isAuthenticated)
+        
         let screen = UIScreen.main.bounds
         let lowerTableViewEdge = (view.frame.height / 2) - (mainVCSafeAreaTopInset) - 14  // TODO: Why the 14?
         let dismissButtonHeight = screen.height - lowerTableViewEdge
         let dismissButton = UIButton(frame: CGRect(x: 0, y: lowerTableViewEdge, width: view.frame.width, height: dismissButtonHeight))  // TODO: Why these numbers?
         dismissButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         view.addSubview(dismissButton)
-        // dismissButton.backgroundColor = .green
-        
-        print("View Height: ", view.frame.height)
-        print("Table View Height: ", tableView.frame.height)
-        print("Lower Table View Edge: ", lowerTableViewEdge)
-        print("Button Height: ", dismissButton.frame.height)
         
         if ENSession.shared.isAuthenticated {
             loadAccountData()
         }
+    }
+    
+    func updateFooterView(link: Bool) {
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 50))
+        var button: UIButton
+        
+        if ENSession.shared.isAuthenticated {
+            button = UnlinkButton(frame: CGRect(x: 16, y: 0, width: tableView.frame.width - 32, height: 50))
+            button.addTarget(self, action: #selector(unlinkEvernote), for: .touchUpInside)
+        } else {
+            button = LinkButton(frame: CGRect(x: 16, y: 0, width: tableView.frame.width - 32, height: 50))
+            button.addTarget(self, action: #selector(linkEvernote), for: .touchUpInside)
+        }
+        container.addSubview(button)
+        tableView.tableFooterView = container
+    }
+    
+    @objc func linkEvernote() {
+        EvernoteIntegration.authenticate(with: self, completion: { _ in
+            self.loadAccountData()
+            self.updateFooterView(link: !ENSession.shared.isAuthenticated)
+        })
+    }
+    
+    @objc func unlinkEvernote() {
+        ENSession.shared.unauthenticate()
+        tableView.reloadData()
+        self.updateFooterView(link: !ENSession.shared.isAuthenticated)
     }
     
     fileprivate func loadAccountData() {
@@ -135,31 +159,6 @@ class SettingsTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if ENSession.shared.isAuthenticated {
-            let button = UnlinkButton()
-            button.addTarget(self, action: #selector(unlinkEvernote), for: .touchUpInside)
-            return button
-        } else {
-            let button = LinkButton()
-            button.addTarget(self, action: #selector(linkEvernote), for: .touchUpInside)
-            return button
-        }
-    }
-    
-    @objc func linkEvernote() {
-        EvernoteIntegration.authenticate(with: self, completion: { _ in self.loadAccountData() })
-    }
-    
-    @objc func unlinkEvernote() {
-        ENSession.shared.unauthenticate()
-        tableView.reloadData()
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 50
     }
 }
