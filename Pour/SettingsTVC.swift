@@ -38,10 +38,7 @@ class SettingsTVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // let f = tableView.frame
-        // let oldTVHeight = f.height
-        // let newTVHeight = oldTVHeight / 2 - mainVCSafeAreaTopInset
-        // tableView.frame = CGRect(x: f.origin.x, y: f.origin.y, width: f.width, height: newTVHeight)
+        
         tableView.backgroundColor = .black
         tableView.separatorColor = .clear
         let doneButton = UIBarButtonItem(title: "\u{2715}", style: .plain, target: self, action: #selector(close))
@@ -49,6 +46,7 @@ class SettingsTVC: UITableViewController {
         tableView.alwaysBounceVertical = false
         tableView.register(SettingsCell.self, forCellReuseIdentifier: "Settings Cell")
         
+        createHeaderView()
         updateFooterView(link: !ENSession.shared.isAuthenticated)
         
         let screen = UIScreen.main.bounds
@@ -61,6 +59,17 @@ class SettingsTVC: UITableViewController {
         if ENSession.shared.isAuthenticated {
             loadAccountData()
         }
+    }
+    
+    func createHeaderView() {
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 48))
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: container.frame.width, height: 32))
+        titleLabel.text = "Settings"
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .semibold)
+        titleLabel.textAlignment = .center
+        container.addSubview(titleLabel)
+        tableView.tableHeaderView = container
     }
     
     func updateFooterView(link: Bool) {
@@ -145,21 +154,5 @@ class SettingsTVC: UITableViewController {
         }
 
         return cell
-    }
-    
-    // TODO: Use the tableView.tableHeaderView property instead of these two section related methods
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 70))
-        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: container.frame.width, height: 28))
-        titleLabel.text = "Settings"
-        titleLabel.textColor = .white
-        titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
-        titleLabel.textAlignment = .center
-        container.addSubview(titleLabel)
-        return container
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
     }
 }
