@@ -38,7 +38,6 @@ class SettingsTVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.backgroundColor = .black
         tableView.separatorColor = .clear
         let doneButton = UIBarButtonItem(title: "\u{2715}", style: .plain, target: self, action: #selector(close))
@@ -47,7 +46,7 @@ class SettingsTVC: UITableViewController {
         tableView.register(SettingsCell.self, forCellReuseIdentifier: "Settings Cell")
         
         createHeaderView()
-        updateFooterView(link: !ENSession.shared.isAuthenticated)
+        updateLinkButton()
         
         let screen = UIScreen.main.bounds
         let lowerTableViewEdge = (view.frame.height / 2) - (mainVCSafeAreaTopInset) - 14  // TODO: Why the 14?
@@ -72,7 +71,7 @@ class SettingsTVC: UITableViewController {
         tableView.tableHeaderView = container
     }
     
-    func updateFooterView(link: Bool) {
+    func updateLinkButton() {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 50))
         var button: UIButton
         
@@ -88,16 +87,20 @@ class SettingsTVC: UITableViewController {
     }
     
     @objc func linkEvernote() {
-        EvernoteIntegration.authenticate(with: self, completion: { _ in
+        EvernoteIntegration.authenticate(with: self, completion: { error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
             self.loadAccountData()
-            self.updateFooterView(link: !ENSession.shared.isAuthenticated)
+            self.updateLinkButton()
         })
     }
     
     @objc func unlinkEvernote() {
         ENSession.shared.unauthenticate()
         tableView.reloadData()
-        self.updateFooterView(link: !ENSession.shared.isAuthenticated)
+        self.updateLinkButton()
     }
     
     fileprivate func loadAccountData() {
@@ -120,6 +123,12 @@ class SettingsTVC: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         view.backgroundColor = .clear
+        print("View did appear")
+        print(view.frame.height)
+        print(UIScreen.main.bounds.height)
+        print(view.frame.origin.y)
+        print(tableView.frame.height)
+        print(tableView.frame.origin.y)
     }
 
     
