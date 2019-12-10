@@ -22,6 +22,16 @@ public class StyleKit : NSObject {
         static let borderGray: UIColor = UIColor(red: 0.502, green: 0.502, blue: 0.518, alpha: 1.000)
         static let recRed: UIColor = UIColor(red: 0.816, green: 0.008, blue: 0.107, alpha: 1.000)
         static let evernoteGreen: UIColor = UIColor(red: 0.455, green: 0.733, blue: 0.267, alpha: 1.000)
+        static var imageOfRecButton: UIImage?
+        static var recButtonTargets: [AnyObject]?
+        static var imageOfSettingsButton: UIImage?
+        static var settingsButtonTargets: [AnyObject]?
+        static var imageOfStopButton: UIImage?
+        static var stopButtonTargets: [AnyObject]?
+        static var imageOfDeleteButton: UIImage?
+        static var deleteButtonTargets: [AnyObject]?
+        static var imageOfEvernoteButton: UIImage?
+        static var evernoteButtonTargets: [AnyObject]?
     }
 
     //// Colors
@@ -199,7 +209,7 @@ public class StyleKit : NSObject {
 
     }
 
-    @objc dynamic public class func drawPauseButton(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 222, height: 222), resizing: ResizingBehavior = .aspectFit) {
+    @objc dynamic public class func drawPauseButton(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 222, height: 222), resizing: ResizingBehavior = .aspectFit, activated: Bool = false) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()!
         
@@ -209,6 +219,10 @@ public class StyleKit : NSObject {
         context.translateBy(x: resizedFrame.minX, y: resizedFrame.minY)
         context.scaleBy(x: resizedFrame.width / 222, y: resizedFrame.height / 222)
 
+
+
+        //// Variable Declarations
+        let iconColor = activated ? StyleKit.borderGray : StyleKit.recRed
 
         //// Oval Drawing
         let ovalPath = UIBezierPath(ovalIn: CGRect(x: 1, y: 1, width: 220, height: 220))
@@ -236,7 +250,7 @@ public class StyleKit : NSObject {
         bezierPath.addLine(to: CGPoint(x: 61, y: 77.5))
         bezierPath.close()
         bezierPath.usesEvenOddFillRule = true
-        StyleKit.recRed.setFill()
+        iconColor.setFill()
         bezierPath.fill()
 
 
@@ -253,7 +267,7 @@ public class StyleKit : NSObject {
         bezier2Path.addLine(to: CGPoint(x: 128, y: 77.5))
         bezier2Path.close()
         bezier2Path.usesEvenOddFillRule = true
-        StyleKit.recRed.setFill()
+        iconColor.setFill()
         bezier2Path.fill()
 
 
@@ -540,6 +554,140 @@ public class StyleKit : NSObject {
         
         context.restoreGState()
 
+    }
+
+    //// Generated Images
+
+    @objc dynamic public class var imageOfRecButton: UIImage {
+        if Cache.imageOfRecButton != nil {
+            return Cache.imageOfRecButton!
+        }
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 222, height: 222), false, 0)
+            StyleKit.drawRecButton()
+
+        Cache.imageOfRecButton = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return Cache.imageOfRecButton!
+    }
+
+    @objc dynamic public class var imageOfSettingsButton: UIImage {
+        if Cache.imageOfSettingsButton != nil {
+            return Cache.imageOfSettingsButton!
+        }
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 222, height: 222), false, 0)
+            StyleKit.drawSettingsButton()
+
+        Cache.imageOfSettingsButton = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return Cache.imageOfSettingsButton!
+    }
+
+    @objc dynamic public class func imageOfPauseButton(activated: Bool = false) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 222, height: 222), false, 0)
+            StyleKit.drawPauseButton(activated: activated)
+
+        let imageOfPauseButton = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return imageOfPauseButton
+    }
+
+    @objc dynamic public class var imageOfStopButton: UIImage {
+        if Cache.imageOfStopButton != nil {
+            return Cache.imageOfStopButton!
+        }
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 222, height: 222), false, 0)
+            StyleKit.drawStopButton()
+
+        Cache.imageOfStopButton = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return Cache.imageOfStopButton!
+    }
+
+    @objc dynamic public class var imageOfDeleteButton: UIImage {
+        if Cache.imageOfDeleteButton != nil {
+            return Cache.imageOfDeleteButton!
+        }
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 222, height: 222), false, 0)
+            StyleKit.drawDeleteButton()
+
+        Cache.imageOfDeleteButton = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return Cache.imageOfDeleteButton!
+    }
+
+    @objc dynamic public class var imageOfEvernoteButton: UIImage {
+        if Cache.imageOfEvernoteButton != nil {
+            return Cache.imageOfEvernoteButton!
+        }
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 222, height: 222), false, 0)
+            StyleKit.drawEvernoteButton()
+
+        Cache.imageOfEvernoteButton = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return Cache.imageOfEvernoteButton!
+    }
+
+    //// Customization Infrastructure
+
+    @objc @IBOutlet dynamic var recButtonTargets: [AnyObject]! {
+        get { return Cache.recButtonTargets }
+        set {
+            Cache.recButtonTargets = newValue
+            for target: AnyObject in newValue {
+                let _ = target.perform(NSSelectorFromString("setImage:"), with: StyleKit.imageOfRecButton)
+            }
+        }
+    }
+
+    @objc @IBOutlet dynamic var settingsButtonTargets: [AnyObject]! {
+        get { return Cache.settingsButtonTargets }
+        set {
+            Cache.settingsButtonTargets = newValue
+            for target: AnyObject in newValue {
+                let _ = target.perform(NSSelectorFromString("setImage:"), with: StyleKit.imageOfSettingsButton)
+            }
+        }
+    }
+
+    @objc @IBOutlet dynamic var stopButtonTargets: [AnyObject]! {
+        get { return Cache.stopButtonTargets }
+        set {
+            Cache.stopButtonTargets = newValue
+            for target: AnyObject in newValue {
+                let _ = target.perform(NSSelectorFromString("setImage:"), with: StyleKit.imageOfStopButton)
+            }
+        }
+    }
+
+    @objc @IBOutlet dynamic var deleteButtonTargets: [AnyObject]! {
+        get { return Cache.deleteButtonTargets }
+        set {
+            Cache.deleteButtonTargets = newValue
+            for target: AnyObject in newValue {
+                let _ = target.perform(NSSelectorFromString("setImage:"), with: StyleKit.imageOfDeleteButton)
+            }
+        }
+    }
+
+    @objc @IBOutlet dynamic var evernoteButtonTargets: [AnyObject]! {
+        get { return Cache.evernoteButtonTargets }
+        set {
+            Cache.evernoteButtonTargets = newValue
+            for target: AnyObject in newValue {
+                let _ = target.perform(NSSelectorFromString("setImage:"), with: StyleKit.imageOfEvernoteButton)
+            }
+        }
     }
 
 
