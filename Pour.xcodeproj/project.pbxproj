@@ -25,6 +25,7 @@
 		7C9844FF238BE63600A1CACF /* MainVC+Transitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9844FE238BE63600A1CACF /* MainVC+Transitioning.swift */; };
 		7C9DDB36237D76E80024E180 /* NotebooksTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9DDB35237D76E80024E180 /* NotebooksTVC.swift */; };
 		7C9DDB38237D7D0F0024E180 /* NotebookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9DDB37237D7D0F0024E180 /* NotebookCell.swift */; };
+		7CC78C91239FEAD800820A16 /* StyleKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC78C90239FEAD800820A16 /* StyleKit.swift */; };
 		B42B0ADE357D0D2940A5DE84 /* Pods_Pour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050D10F1F8F773A72A561EE8 /* Pods_Pour.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		7C9844FE238BE63600A1CACF /* MainVC+Transitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+Transitioning.swift"; sourceTree = "<group>"; };
 		7C9DDB35237D76E80024E180 /* NotebooksTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksTVC.swift; sourceTree = "<group>"; };
 		7C9DDB37237D7D0F0024E180 /* NotebookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookCell.swift; sourceTree = "<group>"; };
+		7CC78C90239FEAD800820A16 /* StyleKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyleKit.swift; sourceTree = "<group>"; };
 		8FE0D44A2F707DB44CEFF0E6 /* Pods-Pour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pour.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pour/Pods-Pour.release.xcconfig"; sourceTree = "<group>"; };
 		CA92D373141253449D509563 /* Pods-Pour.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pour.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pour/Pods-Pour.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -102,6 +104,7 @@
 				30E8E4721F8BA2FA000AEA37 /* Audio.swift */,
 				30E8E4741F8C1B5C000AEA37 /* EvernoteIntegration.swift */,
 				7C77017B237B94F50094E68F /* UIView+SafeArea.swift */,
+				7CC78C90239FEAD800820A16 /* StyleKit.swift */,
 				30E4416A1F7D3F8F00FC8463 /* Assets.xcassets */,
 				30E4416C1F7D3F8F00FC8463 /* LaunchScreen.storyboard */,
 				30E4416F1F7D3F8F00FC8463 /* Info.plist */,
@@ -259,6 +262,7 @@
 				30E8E4711F8BA092000AEA37 /* MainVC+AppearingViews.swift in Sources */,
 				7C9844FB238BDF7100A1CACF /* DownTransition.swift in Sources */,
 				30E441661F7D3F8F00FC8463 /* MainVC.swift in Sources */,
+				7CC78C91239FEAD800820A16 /* StyleKit.swift in Sources */,
 				7C9DDB38237D7D0F0024E180 /* NotebookCell.swift in Sources */,
 				30E8E4751F8C1B5C000AEA37 /* EvernoteIntegration.swift in Sources */,
 				30E8E4731F8BA2FA000AEA37 /* Audio.swift in Sources */,
