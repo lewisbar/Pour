@@ -24,19 +24,29 @@ class MainVC: UIViewController {
     
     var state: State = .readyToRecord {
         didSet {
+            topButton.removeTarget(nil, action: nil, for: .allEvents)
+            bottomButton.removeTarget(nil, action: nil, for: .allEvents)
             switch state {
             case .readyToRecord:
-                topButton.setImage(settings, for: .normal)
-                bottomButton.setImage(rec, for: .normal)
+                topButton.setImage(StyleKit.imageOfSettingsButton, for: .normal)
+                topButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
+                bottomButton.setImage(StyleKit.imageOfRecButton, for: .normal)
+                bottomButton.addTarget(self, action: #selector(recButtonPressed), for: .touchUpInside)
             case .recording:
-                topButton.setImage(pauseRecording, for: .normal)
-                bottomButton.setImage(stopRecording, for: .normal)
+                topButton.setImage(StyleKit.imageOfPauseButton(), for: .normal)
+                topButton.addTarget(self, action: #selector(pauseButtonPressed), for: .touchUpInside)
+                bottomButton.setImage(StyleKit.imageOfStopButton, for: .normal)
+                bottomButton.addTarget(self, action: #selector(stopButtonPressed), for: .touchUpInside)
             case .recordingPaused:
-                topButton.setImage(unpauseRecording, for: .normal)
-                bottomButton.setImage(stopRecording, for: .normal)
+                topButton.setImage(StyleKit.imageOfPauseButton(activated: true), for: .normal)
+                topButton.addTarget(self, action: #selector(unpauseButtonPressed), for: .touchUpInside)
+                bottomButton.setImage(StyleKit.imageOfStopButton, for: .normal)
+                bottomButton.addTarget(self, action: #selector(stopButtonPressed), for: .touchUpInside)
             case .recordingStopped:
-                topButton.setImage(delete, for: .normal)
-                bottomButton.setImage(evernote, for: .normal)
+                topButton.setImage(StyleKit.imageOfDeleteButton, for: .normal)
+                topButton.addTarget(self, action: #selector(deleteButtonPressed), for: .touchUpInside)
+                bottomButton.setImage(StyleKit.imageOfEvernoteButton, for: .normal)
+                bottomButton.addTarget(self, action: #selector(evernoteButtonPressed), for: .touchUpInside)
             }
         }
     }
@@ -59,27 +69,27 @@ class MainVC: UIViewController {
     var noteRef: ENNoteRef?
     
     // Images
-    let settings = #imageLiteral(resourceName: "Settings Button")
-    let rec = #imageLiteral(resourceName: "Rec Button")
-    let stopRecording = #imageLiteral(resourceName: "Stop Button")
-    let pauseRecording = #imageLiteral(resourceName: "Pause Recording Button")
-    let unpauseRecording = #imageLiteral(resourceName: "Unpause Recording Button")
-    let play = #imageLiteral(resourceName: "Play Button")
-    let pausePlayback = #imageLiteral(resourceName: "Pause Playback Button")
-    let unpausePlayback = #imageLiteral(resourceName: "Unpause Playback Button")
-    let delete = #imageLiteral(resourceName: "Delete Button")
-    let evernote = #imageLiteral(resourceName: "Evernote Button")
-    let dropbox = #imageLiteral(resourceName: "Dropbox Button")
+    //    let settings = #imageLiteral(resourceName: "Settings Button")
+    //    let rec = #imageLiteral(resourceName: "Rec Button")
+    //    let stopRecording = #imageLiteral(resourceName: "Stop Button")
+    //    let pauseRecording = #imageLiteral(resourceName: "Pause Recording Button")
+    //    let unpauseRecording = #imageLiteral(resourceName: "Unpause Recording Button")
+    //    let play = #imageLiteral(resourceName: "Play Button")
+    //    let pausePlayback = #imageLiteral(resourceName: "Pause Playback Button")
+    //    let unpausePlayback = #imageLiteral(resourceName: "Unpause Playback Button")
+    //    let delete = #imageLiteral(resourceName: "Delete Button")
+    //    let evernote = #imageLiteral(resourceName: "Evernote Button")
+    //    let dropbox = #imageLiteral(resourceName: "Dropbox Button")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // ENSession.shared.unauthenticate()
         
-        topButton.setImage(settings, for: .normal)
-        bottomButton.setImage(rec, for: .normal)
-        topButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
-        bottomButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        topButton.setImage(StyleKit.imageOfSettingsButton, for: .normal)
+        bottomButton.setImage(StyleKit.imageOfRecButton, for: .normal)
+        topButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
+        bottomButton.addTarget(self, action: #selector(recButtonPressed), for: .touchUpInside)
         banner.backgroundColor = .black
         banner.titleLabel?.textColor = .white
         banner.addTarget(self, action: #selector(bannerTouched(_:)), for: .touchUpInside)
@@ -119,7 +129,7 @@ class MainVC: UIViewController {
         activityViewWidth = activityView.widthAnchor.constraint(equalToConstant: 0)
         activityViewHeight = activityView.heightAnchor.constraint(equalToConstant: 0)
         bannerHeight = banner.heightAnchor.constraint(equalToConstant: 0)
-
+        
         // During the transition to SettingsVC, the status bar disappears, seemingly setting the safe area top inset to zero, which made the view jump up a bit. Therefore, I can't simply use view.safeAreaLayoutGuide.topAnchor. The solution I found is to get the safeAreaLayoutGuide constant and use that constant directly, so it doesn't change when the safe area changes.
         if #available(iOS 11.0, *) {
             safeAreaTopInset = max(UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0, 20)
@@ -174,118 +184,104 @@ class MainVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @objc func buttonPressed(_ sender: UIButton) {
-        guard let currentImage = sender.image(for: .normal) else {
-            print("Button can't be identified. Image missing.")
-            return
-        }
-        
-        switch currentImage {
-            
-        // Settings
-        case settings:
-            // TODO: Pre-load SettingsTVC? First appearance is a bit delayed right now.
-            let settingsVC = SettingsTVC()
-            settingsVC.mainVCSafeAreaTopInset = safeAreaTopInset
-            let nav = UINavigationController(rootViewController: settingsVC)
-            nav.navigationBar.barTintColor = .black
-            nav.navigationBar.tintColor = .white
-            nav.navigationBar.isTranslucent = false
-            nav.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .semibold), NSAttributedString.Key.foregroundColor: UIColor.white]
-            nav.transitioningDelegate = self
-            nav.modalPresentationStyle = .custom
-            nav.modalPresentationCapturesStatusBarAppearance = true
-            present(nav, animated: true)
-            
-        // Recording
-        case rec:
-            do {
-                try audio.record()
-                state = .recording
-            } catch {
-                alert(title: "Error", message: error.localizedDescription)
-            }
-
-        case pauseRecording:
-            audio.pauseRecording()
-            state = .recordingPaused
-        case unpauseRecording:
-            audio.unpauseRecording()
+    @objc func settingsButtonPressed() {
+        // TODO: Pre-load SettingsTVC? First appearance is a bit delayed right now.
+        let settingsVC = SettingsTVC()
+        settingsVC.mainVCSafeAreaTopInset = safeAreaTopInset
+        let nav = UINavigationController(rootViewController: settingsVC)
+        nav.navigationBar.barTintColor = .black
+        nav.navigationBar.tintColor = .white
+        nav.navigationBar.isTranslucent = false
+        nav.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .semibold), NSAttributedString.Key.foregroundColor: UIColor.white]
+        nav.transitioningDelegate = self
+        nav.modalPresentationStyle = .custom
+        nav.modalPresentationCapturesStatusBarAppearance = true
+        present(nav, animated: true)
+    }
+    
+    @objc func recButtonPressed() {
+        do {
+            try audio.record()
             state = .recording
-        case stopRecording:
-            audio.stopRecording()
-//            do {
-//                try audio.preparePlayback()
-//            } catch {
-//                alert(title: "Error", message: error.localizedDescription)
-//            }
-            state = .recordingStopped
-            
-//        // Playback
-//        case play:
-//            audio.play()
-//            bottomButton.setImage(pausePlayback, for: .normal)
-//        case pausePlayback:
-//            audio.pausePlayback()
-//            bottomButton.setImage(unpausePlayback, for: .normal)
-//        case unpausePlayback:
-//            audio.unpausePlayback()
-//            bottomButton.setImage(pausePlayback, for: .normal)
-            
-        // Deletion
-        case delete:
-            audio.stopPlayback()
-            audio.deleteRecording()
-            state = .readyToRecord
-            
-        // Export
-        case evernote:
-            EvernoteIntegration.authenticate(with: self) { error in
-                if let error = error {
-                    self.alert(title: "Error", message: error.localizedDescription)
-                    return
-                }
-                self.showActivity()
-                
-                guard let audioURL = self.audio.url else {
-                    self.alert(title: "Error", message: "Recording not found")
-                    return
-                }
-                let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Upload to Evernote", expirationHandler: {
-                    self.state = .recordingStopped
-                    self.hideActivity()
-                })
-                do {
-                    try EvernoteIntegration.send(audioURL: audioURL) { (noteRef, error) in
-                        if let error = error { print(error.localizedDescription) }
-                        self.noteRef = noteRef
-                        let preposition = EvernoteIntegration.evernoteHasFixedViewInEvernoteFunctionality ? " in" : ""
-                        self.showBanner(text: "Upload complete. Tap here to open\(preposition) Evernote.")
-                        self.hideActivity()
-                        self.state = .readyToRecord
-                    }
-                } catch EvernoteIntegrationError.audioFileToData {
-                    self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
-                } catch EvernoteIntegrationError.dataToResource {
-                    self.alert(title: "Export failed", message: "Audio file could not be attached to note.")
-                } catch {
-                    self.alert(title: "Unknown error", message: "Please try again.")
-                }
-                UIApplication.shared.endBackgroundTask(backgroundTaskID)
+        } catch {
+            alert(title: "Error", message: error.localizedDescription)
+        }
+    }
+    
+    @objc func pauseButtonPressed() {
+        audio.pauseRecording()
+        state = .recordingPaused
+    }
+    
+    @objc func unpauseButtonPressed() {
+        audio.unpauseRecording()
+        state = .recording
+    }
+    
+    @objc func stopButtonPressed() {
+        audio.stopRecording()
+        //            do {
+        //                try audio.preparePlayback()
+        //            } catch {
+        //                alert(title: "Error", message: error.localizedDescription)
+        //            }
+        state = .recordingStopped
+    }
+    //        // Playback
+    //        case play:
+    //            audio.play()
+    //            bottomButton.setImage(pausePlayback, for: .normal)
+    //        case pausePlayback:
+    //            audio.pausePlayback()
+    //            bottomButton.setImage(unpausePlayback, for: .normal)
+    //        case unpausePlayback:
+    //            audio.unpausePlayback()
+    //            bottomButton.setImage(pausePlayback, for: .normal)
+    
+    @objc func deleteButtonPressed() {
+        audio.stopPlayback()
+        audio.deleteRecording()
+        state = .readyToRecord
+    }
+    
+    @objc func evernoteButtonPressed() {
+        EvernoteIntegration.authenticate(with: self) { error in
+            if let error = error {
+                self.alert(title: "Error", message: error.localizedDescription)
+                return
             }
-
-        case dropbox:
-            print("Dropbox export not implemented yet.")
-            state = .readyToRecord
+            self.showActivity()
             
-        // Default
-        default:
-            print("Button can't be identified. Unknown image.")
-            break
+            guard let audioURL = self.audio.url else {
+                self.alert(title: "Error", message: "Recording not found")
+                return
+            }
+            let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Upload to Evernote", expirationHandler: {
+                self.state = .recordingStopped
+                self.hideActivity()
+            })
+            do {
+                try EvernoteIntegration.send(audioURL: audioURL) { (noteRef, error) in
+                    if let error = error { print(error.localizedDescription) }
+                    self.noteRef = noteRef
+                    let preposition = EvernoteIntegration.evernoteHasFixedViewInEvernoteFunctionality ? " in" : ""
+                    self.showBanner(text: "Upload complete. Tap here to open\(preposition) Evernote.")
+                    self.hideActivity()
+                    self.state = .readyToRecord
+                }
+            } catch EvernoteIntegrationError.audioFileToData {
+                self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
+            } catch EvernoteIntegrationError.dataToResource {
+                self.alert(title: "Export failed", message: "Audio file could not be attached to note.")
+            } catch {
+                self.alert(title: "Unknown error", message: "Please try again.")
+            }
+            UIApplication.shared.endBackgroundTask(backgroundTaskID)
         }
     }
 }
-    
+
+
 // MARK: - General Helpers
 extension MainVC {
     func getDocumentsDirectory() -> URL {
