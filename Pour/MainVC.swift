@@ -245,39 +245,71 @@ class MainVC: UIViewController {
     }
     
     @objc func evernoteButtonPressed() {
-        EvernoteIntegration.authenticate(with: self) { error in
-            if let error = error {
-                self.alert(title: "Error", message: error.localizedDescription)
-                return
-            }
-            self.showActivity()
-            
-            guard let audioURL = self.audio.url else {
-                self.alert(title: "Error", message: "Recording not found")
-                return
-            }
-            let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Upload to Evernote", expirationHandler: {
-                self.state = .recordingStopped
-                self.hideActivity()
-            })
-            do {
-                try EvernoteIntegration.send(audioURL: audioURL) { (noteRef, error) in
-                    if let error = error { print(error.localizedDescription) }
-                    self.noteRef = noteRef
-                    let preposition = EvernoteIntegration.evernoteHasFixedViewInEvernoteFunctionality ? " in" : ""
-                    self.showBanner(text: "Upload complete. Tap here to open\(preposition) Evernote.")
-                    self.hideActivity()
-                    self.state = .readyToRecord
-                }
-            } catch EvernoteIntegrationError.audioFileToData {
-                self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
-            } catch EvernoteIntegrationError.dataToResource {
-                self.alert(title: "Export failed", message: "Audio file could not be attached to note.")
-            } catch {
-                self.alert(title: "Unknown error", message: "Please try again.")
-            }
-            UIApplication.shared.endBackgroundTask(backgroundTaskID)
+        bearButtonPressed()
+        return
+        
+//        EvernoteIntegration.authenticate(with: self) { error in
+//            if let error = error {
+//                self.alert(title: "Error", message: error.localizedDescription)
+//                return
+//            }
+//            self.showActivity()
+//            
+//            guard let audioURL = self.audio.url else {
+//                self.alert(title: "Error", message: "Recording not found")
+//                return
+//            }
+//            let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Upload to Evernote", expirationHandler: {
+//                self.state = .recordingStopped
+//                self.hideActivity()
+//            })
+//            do {
+//                try EvernoteIntegration.send(audioURL: audioURL) { (noteRef, error) in
+//                    if let error = error { print(error.localizedDescription) }
+//                    self.noteRef = noteRef
+//                    let preposition = EvernoteIntegration.evernoteHasFixedViewInEvernoteFunctionality ? " in" : ""
+//                    self.showBanner(text: "Upload complete. Tap here to open\(preposition) Evernote.")
+//                    self.hideActivity()
+//                    self.state = .readyToRecord
+//                }
+//            } catch EvernoteIntegrationError.audioFileToData {
+//                self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
+//            } catch EvernoteIntegrationError.dataToResource {
+//                self.alert(title: "Export failed", message: "Audio file could not be attached to note.")
+//            } catch {
+//                self.alert(title: "Unknown error", message: "Please try again.")
+//            }
+//            UIApplication.shared.endBackgroundTask(backgroundTaskID)
+//        }
+    }
+    
+    @objc func bearButtonPressed() {
+        self.showActivity()
+        guard let audioURL = self.audio.url else {
+            self.alert(title: "Error", message: "Recording not found")
+            return
         }
+        let backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Export to Bear", expirationHandler: {
+            self.state = .recordingStopped
+            self.hideActivity()
+        })
+        do {
+            try BearIntegration.send(audioURL: audioURL) {
+                // self.showBanner(text: "Upload complete. Tap here to open\(preposition) Evernote.")
+                self.hideActivity()
+                self.state = .readyToRecord
+            }
+        } catch BearIntegrationError.audioFileToData {
+            self.alert(title: "Export failed", message: "Audio file could not be converted to Data type.")
+            self.hideActivity()
+        } catch BearIntegrationError.invalidURL {
+            self.alert(title: "Export failed", message: "URL could not be created.")
+            self.hideActivity()
+        } catch {
+            self.alert(title: "Unknown error", message: "Please try again.")
+            self.hideActivity()
+        }
+        UIApplication.shared.endBackgroundTask(backgroundTaskID)
     }
 }
 

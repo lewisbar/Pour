@@ -28,7 +28,7 @@ struct EvernoteIntegration {
     
     static func send(audioURL: URL, completion: @escaping ENSessionUploadNoteCompletionHandler) throws {
         let note = ENNote()
-        let title = titleFromCurrentDate()
+        let title = Helpers.titleFromCurrentDate()
         let filename = title + ".m4a"
         guard let data = try? Data(contentsOf: audioURL) else {
             throw EvernoteIntegrationError.audioFileToData
@@ -72,15 +72,5 @@ struct EvernoteIntegration {
         }
         
         UIApplication.shared.open(url)
-    }
-}
-
-extension EvernoteIntegration {
-    private static func titleFromCurrentDate() -> String {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd [hh:mm]"
-        let title = formatter.string(from: date)
-        return title
     }
 }

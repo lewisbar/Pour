@@ -16,6 +16,8 @@
 		30E8E4711F8BA092000AEA37 /* MainVC+AppearingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E8E4701F8BA092000AEA37 /* MainVC+AppearingViews.swift */; };
 		30E8E4731F8BA2FA000AEA37 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E8E4721F8BA2FA000AEA37 /* Audio.swift */; };
 		30E8E4751F8C1B5C000AEA37 /* EvernoteIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E8E4741F8C1B5C000AEA37 /* EvernoteIntegration.swift */; };
+		7C158C6523AD8ABD0059795F /* BearIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158C6423AD8ABD0059795F /* BearIntegration.swift */; };
+		7C158C6723ADA72F0059795F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158C6623ADA72F0059795F /* Helpers.swift */; };
 		7C25747E2398119C00D8AD04 /* UnlinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C25747D2398119C00D8AD04 /* UnlinkButton.swift */; };
 		7C5DA2852382DCD400B82B2D /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5DA2842382DCD400B82B2D /* SettingsCell.swift */; };
 		7C5DA287238333E700B82B2D /* LinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5DA286238333E700B82B2D /* LinkButton.swift */; };
@@ -42,6 +44,8 @@
 		30E8E4701F8BA092000AEA37 /* MainVC+AppearingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+AppearingViews.swift"; sourceTree = "<group>"; };
 		30E8E4721F8BA2FA000AEA37 /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		30E8E4741F8C1B5C000AEA37 /* EvernoteIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvernoteIntegration.swift; sourceTree = "<group>"; };
+		7C158C6423AD8ABD0059795F /* BearIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearIntegration.swift; sourceTree = "<group>"; };
+		7C158C6623ADA72F0059795F /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		7C25747D2398119C00D8AD04 /* UnlinkButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlinkButton.swift; sourceTree = "<group>"; };
 		7C5DA2842382DCD400B82B2D /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		7C5DA286238333E700B82B2D /* LinkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButton.swift; sourceTree = "<group>"; };
@@ -103,6 +107,8 @@
 				7C9DDB37237D7D0F0024E180 /* NotebookCell.swift */,
 				30E8E4721F8BA2FA000AEA37 /* Audio.swift */,
 				30E8E4741F8C1B5C000AEA37 /* EvernoteIntegration.swift */,
+				7C158C6423AD8ABD0059795F /* BearIntegration.swift */,
+				7C158C6623ADA72F0059795F /* Helpers.swift */,
 				7C77017B237B94F50094E68F /* UIView+SafeArea.swift */,
 				7CC78C90239FEAD800820A16 /* StyleKit.swift */,
 				30E4416A1F7D3F8F00FC8463 /* Assets.xcassets */,
@@ -260,7 +266,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				30E8E4711F8BA092000AEA37 /* MainVC+AppearingViews.swift in Sources */,
+				7C158C6723ADA72F0059795F /* Helpers.swift in Sources */,
 				7C9844FB238BDF7100A1CACF /* DownTransition.swift in Sources */,
+				7C158C6523AD8ABD0059795F /* BearIntegration.swift in Sources */,
 				30E441661F7D3F8F00FC8463 /* MainVC.swift in Sources */,
 				7CC78C91239FEAD800820A16 /* StyleKit.swift in Sources */,
 				7C9DDB38237D7D0F0024E180 /* NotebookCell.swift in Sources */,
